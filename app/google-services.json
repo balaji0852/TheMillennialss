@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "682858959281",
+    "firebase_url": "https://themillennialenewspaper-c24d3.firebaseio.com",
+    "project_id": "themillennialenewspaper-c24d3",
+    "storage_bucket": "themillennialenewspaper-c24d3.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:682858959281:android:eff23893d09b300ccfed90",
+        "android_client_info": {
+          "package_name": "com.tmv01.themillennial"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "682858959281-4o5ss9odtiqpgb96ci0en0a83i81nbdj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCVhscfZ05X_xen6pOFh-NYzQpWqE8LrsI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "682858959281-4o5ss9odtiqpgb96ci0en0a83i81nbdj.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
