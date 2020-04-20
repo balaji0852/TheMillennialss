@@ -3,15 +3,14 @@ package com.tmv01.themillennial;
 import android.media.Image;
 
 public class firstpagedata {
-    String aid,category,date,headline,poname,textualdata,image;
+    String aid,category,date,headline,poname,image;
 
-    public firstpagedata(String aid, String category, String date, String headline, String poname, String textualdata, String image) {
+    public firstpagedata(String aid, String category, String date, String headline, String poname, String image) {
         this.aid = aid;
         this.category = category;
         this.date = date;
         this.headline = headline;
         this.poname = poname;
-        this.textualdata = textualdata;
         this.image= image;
     }
 
@@ -58,13 +57,13 @@ public class firstpagedata {
         this.poname = poname;
     }
 
-    public String getTextualdata() {
-        return textualdata;
-    }
-
-    public void setTextualdata(String textualdata) {
-        this.textualdata = textualdata;
-    }
+//    public String getTextualdata() {
+//        return textualdata;
+//    }
+//
+//    public void setTextualdata(String textualdata) {
+//        this.textualdata = textualdata;
+//    }
 
     public String getImage() {
         return image;
