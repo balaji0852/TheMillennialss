@@ -16,7 +16,9 @@
         app:layout_constraintHorizontal_bias="0.22"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.18" />
+        app:layout_constraintVertical_bias="0.18"
+        android:background="@color/white"
+        android:textColor="@color/black"/>
 
     <Button
         android:id="@+id/Technology"
@@ -28,7 +30,9 @@
         app:layout_constraintHorizontal_bias="0.765"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.18" />
+        app:layout_constraintVertical_bias="0.18"
+        android:background="@color/white"
+        android:textColor="@color/black"/>
 
     <Button
         android:id="@+id/Autonews"
@@ -40,7 +44,9 @@
         app:layout_constraintHorizontal_bias="0.22"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.321" />
+        app:layout_constraintVertical_bias="0.321"
+        android:background="@color/white"
+        android:textColor="@color/black"/>
 
     <Button
         android:id="@+id/Politics"
@@ -52,7 +58,9 @@
         app:layout_constraintHorizontal_bias="0.765"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.321" />
+        app:layout_constraintVertical_bias="0.321"
+        android:background="@color/white"
+        android:textColor="@color/black"/>
 
     <Button
         android:id="@+id/Fashion"
@@ -64,19 +72,23 @@
         app:layout_constraintHorizontal_bias="0.22"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.471" />
+        app:layout_constraintVertical_bias="0.471"
+        android:background="@color/white"
+        android:textColor="@color/black"/>
 
     <Button
-        android:id="@+id/Health"
+        android:id="@+id/entertainment"
         android:layout_width="125dp"
         android:layout_height="55dp"
-        android:text="Health"
+        android:text="Entertainment"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.765"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.471" />
+        app:layout_constraintVertical_bias="0.471"
+        android:background="@color/white"
+        android:textColor="@color/black"/>
 
     <Button
         android:id="@+id/Education"
@@ -89,7 +101,9 @@
         app:layout_constraintHorizontal_bias="0.192"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.625" />
+        app:layout_constraintVertical_bias="0.625"
+        android:background="@color/white"
+        android:textColor="@color/black"/>
 
     <Button
         android:id="@+id/tib"
@@ -101,6 +115,8 @@
         app:layout_constraintHorizontal_bias="0.765"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.625" />
+        app:layout_constraintVertical_bias="0.625"
+        android:background="@color/white"
+        android:textColor="@color/black"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

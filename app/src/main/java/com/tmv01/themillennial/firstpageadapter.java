@@ -60,12 +60,8 @@ public class firstpageadapter extends RecyclerView.Adapter<firstpageadapter.MyVi
             public MyViewHolder(@NonNull final View itemView)
             {
                 super(itemView);
-
                 text = itemView.findViewById(R.id.tbtext);
                 image= itemView.findViewById(R.id.timage);
-
-
-
             }
         }
 

@@ -1,29 +1,41 @@
 package com.tmv01.themillennial;
 
+import java.util.HashMap;
+
 public class preferencedata {
-    Boolean AutoNews, Education, Entertainment, Fashion, Politics, Sports, Technology, tib;
+    private   Boolean  Sports,Politics,Technology,Autonews,Tib,Entertainment,Fashion,Education;
 
-    public preferencedata() {
+    public preferencedata(){}
 
+    public preferencedata(Boolean sports, Boolean politics, Boolean technology, Boolean autonews, Boolean tib, Boolean entertainment, Boolean fashion, Boolean education) {
+        this.Sports = sports;
+        this.Politics = politics;
+        this.Technology = technology;
+        this.Autonews = autonews;
+        this.Tib = tib;
+        this.Entertainment = entertainment;
+        this.Fashion = fashion;
+        this.Education = education;
     }
 
-    public preferencedata(Boolean autoNews, Boolean education, Boolean entertainment, Boolean fashion, Boolean politics, Boolean sports, Boolean technology, Boolean tib) {
-        AutoNews = autoNews;
-        Education = education;
-        Entertainment = entertainment;
-        Fashion = fashion;
-        Politics = politics;
-        Sports = sports;
-        Technology = technology;
-        this.tib = tib;
+    public Boolean getSports() {
+        return Sports;
     }
 
-    public Boolean getAutoNews() {
-        return AutoNews;
+    public Boolean getPolitics() {
+        return Politics;
     }
 
-    public Boolean getEducation() {
-        return Education;
+    public Boolean getTechnology() {
+        return Technology;
+    }
+
+    public Boolean getAutonews() {
+        return Autonews;
+    }
+
+    public Boolean getTib() {
+        return Tib;
     }
 
     public Boolean getEntertainment() {
@@ -34,19 +46,7 @@ public class preferencedata {
         return Fashion;
     }
 
-    public Boolean getPolitics() {
-        return Politics;
-    }
-
-    public Boolean getSports() {
-        return Sports;
-    }
-
-    public Boolean getTechnology() {
-        return Technology;
-    }
-
-    public Boolean getTib() {
-        return tib;
+    public Boolean getEducation() {
+        return Education;
     }
 }
