@@ -76,8 +76,7 @@ public class firstpage extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_firstpage);
         TextView title= findViewById(R.id.title);
-        Toast.makeText(firstpage.this,getIntent().getStringExtra("yyyy")+":"+getIntent().getStringExtra("MM")+
-                ":"+getIntent().getStringExtra("dd"),Toast.LENGTH_LONG).show();
+        Toast.makeText(firstpage.this,udate,Toast.LENGTH_LONG).show();
         Button page2= findViewById(R.id.page3);
         firstleftdata = findViewById(R.id.cycleleft);
         firstpagebottom=findViewById(R.id.cyclebottom);

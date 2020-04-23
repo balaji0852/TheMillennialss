@@ -34,11 +34,11 @@ public class MainActivity extends AppCompatActivity {
                                   String d=String.valueOf(i2);
                                   if(i1<10 && i2<10){
                                       intent.putExtra("date",y+"-"+zero+m+"-"+zero+d);
-                                      Toast.makeText(MainActivity.this, y+":"+zero+m+"-"+zero+d, Toast.LENGTH_SHORT).show();
+                                      Toast.makeText(MainActivity.this, y+"-"+zero+m+"-"+zero+d, Toast.LENGTH_SHORT).show();
                                   }
                                   else if(i1<10 && i2>=10){
                                       intent.putExtra("date",y+"-"+zero+m+"-"+d);
-                                      Toast.makeText(MainActivity.this, y+":"+zero+m+"-"+d, Toast.LENGTH_SHORT).show();
+                                      Toast.makeText(MainActivity.this, y+"-"+zero+m+"-"+d, Toast.LENGTH_SHORT).show();
                                   }
                                   else if (i2<10 && i1>=10){
                                       intent.putExtra("date",y+"-"+m+"-"+zero+d);

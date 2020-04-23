@@ -5,9 +5,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.util.Pair;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -17,7 +19,12 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+
 import javax.annotation.Nullable;
+
+import static java.lang.String.valueOf;
 
 public class tib extends AppCompatActivity {
     FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -28,6 +35,8 @@ public class tib extends AppCompatActivity {
     String category="Politics";
     private String Sports,Politics,Technology,Autonews,Tib,Entertainment,Fashion,Education;
     String uno = "8151033423";
+    ArrayList<String> data = new ArrayList<>();
+
 
     @Override
     protected void onStart() {
@@ -47,7 +56,6 @@ public class tib extends AppCompatActivity {
                         newspage.notifyDataSetChanged();
                     }
                 });
-
     }
 
     @Override
@@ -62,6 +70,7 @@ public class tib extends AppCompatActivity {
         news.setLayoutManager(layoutManager);
         newspage = new newsadapter(tib.this, maindata);
         news.setAdapter(newspage);
+
         db.collection(uno).document("preference").get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
@@ -69,112 +78,153 @@ public class tib extends AppCompatActivity {
                 Sports = String.valueOf(prefered.getSports());
                 Politics = String.valueOf(prefered.getPolitics());
                 Technology = String.valueOf(prefered.getTechnology());
-                Autonews = String.valueOf(prefered.getAutonews());
+                Autonews =String.valueOf(prefered.getAutonews());
                 Tib = String.valueOf(prefered.getTib());
-                Entertainment = String.valueOf(prefered.getEntertainment());
-                Fashion = String.valueOf(prefered.getFashion());
+                Entertainment =String.valueOf(prefered.getEntertainment());
+                Fashion =String.valueOf(prefered.getFashion());
                 Education = String.valueOf(prefered.getEducation());
+                if(Sports.equals("true")) {
+                    data.add("Sports");
+                }
+                if(Technology.equals("true")) {
+                    data.add("Technology");
+                }
+                if(Autonews.equals("true")) {
+                    data.add("Autonews");
+                }
+                if(Tib.equals("true")) {
+                    data.add("Tib");
+                }
+                if(Entertainment.equals("true")) {
+                    data.add("Entertainment");
+                }
+                if(Fashion.equals("true")) {
+                    data.add("Fashion");
+                }
+                if(Education.equals("true")) {
+                    data.add("Education");
+                }
+                if(Politics.equals("true")) {
+                    data.add("Education");
+                }
             } });
+
 
         nextpage.setOnClickListener(new View.OnClickListener() {
             int count=0;
             @SuppressLint("SetTextI18n")
             @Override
             public void onClick(View view) {
-                count++;
-                            if(count==1){
-                                if (Tib.equals("true")){
-                                title.setText("Talks in Bangalore");
-                                category="Talks in Bangalore";
-                                onStart();
-                                }
-                                else {
-                                    count++;
-                                }
 
-                            }
-                            else if(count==2){
-                                 if (Fashion.equals("true")){
-                                     title.setText("Fashion");
-                                     category="Fashion";
-                                     onStart();
-                                 }
-                                 else {
-                                     count++;
-                                 }
-                            }
-                            else if(count==3 ){
-                                if (Entertainment.equals("true")) {
-                                    title.setText("Entertainment");
-                                    category = "Entertainment";
-                                    onStart();
-                                }
-                                else {
-                                    count++;
-                                }
-                            }
-                            else if(count==4 ){
-                                if( Autonews.equals("true")) {
-                                    title.setText("Auto News");
-                                    category = "Auto News";
-                                    onStart();
-                                }
-                                else {
-                                    count++;
-                                }
-                                }
-                            else if(count==5){
-                                if( Technology.equals("true")) {
-                                    title.setText("Technology");
-                                    category = "Technology";
-                                    onStart();
-                                }
-                                else {
-                                    count++;
-                                }
-                            }
-                            else if(count==6){
-                                if( Sports.equals("true")) {
-                                    title.setText("Sports");
-                                    category = "Sports";
-                                    onStart();
-                                }
-                                else {
-                                    count++;
-                                }
-                            }
+                           if(count<data.size()) {
 
-                            else if(count==7){
-                                if(Education.equals("true")) {
-                                    title.setText("Education");
-                                    category = "Education";
-                                    onStart();
-                                }
-                                else {
-                                    count++;
-                                }
-                            }
-                            else if(count==8){
-                                if( Politics.equals("true")) {
-                                    title.setText("Politics");
-                                    category = "Politics";
-                                    onStart();
-                                }
-                                else {
-                                    count++;
-                                }
-                            }
-                            else if(count==9){
-                                title.setText("Novel Corona");
-                                category="Novel Corona";
-                                onStart();
-                            }
-                            else{
-                                title.setText("Talks in Bangalore");
-                                category="Talks in Bangalore";
-                                onStart();
-                                count=0;
-                            }
+                               if (data.get(count).equals("Tib")){
+                                   title.setText("Talks in Bangalore");
+                                   category ="Talks in Bangalore";
+                                   count++;
+                                   onStart();
+                               }
+                               else if (data.get(count).equals("Autonews")){
+                                   title.setText("Auto News");
+                                   category ="Auto News";
+                                   count++;
+                                   onStart();
+                               }
+                               else {
+                                   title.setText(data.get(count));
+                                   category = data.get(count);
+                                   count++;
+                                   onStart();
+                               }
+
+                           }
+                           else{
+                               Toast.makeText(tib.this, "Your prefererence list is done.", Toast.LENGTH_SHORT).show();
+                           }
+
+
+//                            else if(count==2){
+//                                 if (Fashion.equals("true")){
+//                                     title.setText("Fashion");
+//                                     category="Fashion";
+//                                     onStart();
+//                                 }
+//                                 else {
+//                                     count++;
+//                                 }
+//                            }
+//                            else if(count==3 ){
+//                                if (Entertainment.equals("true")) {
+//                                    title.setText("Entertainment");
+//                                    category = "Entertainment";
+//                                    onStart();
+//                                }
+//                                else {
+//                                    count++;
+//                                }
+//                            }
+//                            else if(count==4 ){
+//                                if( Autonews.equals("true")) {
+//                                    title.setText("Auto News");
+//                                    category = "Auto News";
+//                                    onStart();
+//                                }
+//                                else {
+//                                    count++;
+//                                }
+//                                }
+//                            else if(count==5){
+//                                if( Technology.equals("true")) {
+//                                    title.setText("Technology");
+//                                    category = "Technology";
+//                                    onStart();
+//                                }
+//                                else {
+//                                    count++;
+//                                }
+//                            }
+//                            else if(count==6){
+//                                if( Sports.equals("true")) {
+//                                    title.setText("Sports");
+//                                    category = "Sports";
+//                                    onStart();
+//                                }
+//                                else {
+//                                    count++;
+//                                }
+//                            }
+//
+//                            else if(count==7){
+//                                if(Education.equals("true")) {
+//                                    title.setText("Education");
+//                                    category = "Education";
+//                                    onStart();
+//                                }
+//                                else {
+//                                    count++;
+//                                }
+//                            }
+//                            else if(count==8){
+//                                if( Politics.equals("true")) {
+//                                    title.setText("Politics");
+//                                    category = "Politics";
+//                                    onStart();
+//                                }
+//                                else {
+//                                    count++;
+//                                }
+//                            }
+//                            else if(count==9){
+//                                title.setText("Novel Corona");
+//                                category="Novel Corona";
+//                                onStart();
+//                            }
+//                            else{
+//                                title.setText("Talks in Bangalore");
+//                                category="Talks in Bangalore";
+//                                onStart();
+//                                count=0;
+//                            }
 
                 }
 
