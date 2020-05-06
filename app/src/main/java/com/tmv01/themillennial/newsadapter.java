@@ -1,10 +1,12 @@
 package com.tmv01.themillennial;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 import androidx.annotation.NonNull;
@@ -39,9 +41,48 @@ public class newsadapter extends RecyclerView.Adapter<newsadapter.MyViewHolder> 
 
     @Override
     public void onBindViewHolder(@NonNull final MyViewHolder myViewHolder, int i) {
-        firstpagedata dataleft=maindata.get(i);
+        final firstpagedata dataleft=maindata.get(i);
         myViewHolder.text.setText(dataleft.getHeadline());
         Picasso.get().load(dataleft.getImage()).placeholder(R.mipmap.ic_launcher).fit().centerCrop().into(myViewHolder.image);
+        myViewHolder.image.setOnClickListener(new View.OnClickListener() {
+            Intent data;
+            @Override
+            public void onClick(View v ) {
+
+                data=new Intent(v.getContext(),news.class);
+                data.putExtra("headline",dataleft.getHeadline());
+                data.putExtra("image",dataleft.getImage());
+                data.putExtra("textualdata",dataleft.getTextualdata());
+                data.putExtra("title","The Millennial");
+                v.getContext().startActivity(data);
+            }
+        });
+        myViewHolder.text.setOnClickListener(new View.OnClickListener() {
+            Intent data;
+            @Override
+            public void onClick(View v ) {
+
+                data=new Intent(v.getContext(),news.class);
+                data.putExtra("headline",dataleft.getHeadline());
+                data.putExtra("image",dataleft.getImage());
+                data.putExtra("textualdata",dataleft.getTextualdata());
+                data.putExtra("title","The Millennial");
+                v.getContext().startActivity(data);
+            }
+        });
+//        myViewHolder.block.setOnClickListener(new View.OnClickListener() {
+//            Intent data;
+//            @Override
+//            public void onClick(View v ) {
+//
+//                data=new Intent(v.getContext(),news.class);
+//                data.putExtra("headline",dataleft.getHeadline());
+//                data.putExtra("image",dataleft.getImage());
+//                data.putExtra("textualdata",dataleft.getTextualdata());
+//                data.putExtra("title","First Page");
+//                v.getContext().startActivity(data);
+//            }
+//        });
 
     }
 
@@ -55,6 +96,7 @@ public class newsadapter extends RecyclerView.Adapter<newsadapter.MyViewHolder> 
     {
         TextView text;
         ImageView image;
+        RelativeLayout block;
 
 
         public MyViewHolder(@NonNull final View itemView)
@@ -63,6 +105,7 @@ public class newsadapter extends RecyclerView.Adapter<newsadapter.MyViewHolder> 
 
             text = itemView.findViewById(R.id.tibtext);
             image= itemView.findViewById(R.id.tibimage);
+            block = itemView.findViewById(R.id.tib);
 
 
 

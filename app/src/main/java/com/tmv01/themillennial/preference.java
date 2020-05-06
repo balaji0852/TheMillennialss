@@ -3,6 +3,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -112,52 +113,51 @@ public class preference extends AppCompatActivity  {
 
 
                 sports.setOnClickListener(new View.OnClickListener() {
-                        int count=0;
-                        @Override
+                    @Override
                         public void onClick(View view) {
-                            if(count%2==0){
-                                Map<String, Object> data = new HashMap<>();
-                                data.put("Sports", true);
-                                db.collection("8151033423").document("preference")
-                                        .set(data, SetOptions.merge());
-                                sports.setBackgroundColor(getResources().getColor(R.color.black));
-                                sports.setTextColor(getResources().getColor(R.color.white));
-                                count++;
+                                if(Sports.equals("true")) {
+                                    Map<String, Object> data = new HashMap<>();
+                                    data.put("Sports", false);
+                                    db.collection("8151033423").document("preference")
+                                            .set(data, SetOptions.merge());
+                                    sports.setBackgroundColor(getResources().getColor(R.color.white));
+                                    sports.setTextColor(getResources().getColor(R.color.black));
+                                    Sports= "false";
+                                }
+                                else
+                                    {
+                                    Map<String, Object> data = new HashMap<>();
+                                    data.put("Sports", true);
+                                    db.collection("8151033423").document("preference")
+                                            .set(data, SetOptions.merge());
+                                    sports.setBackgroundColor(getResources().getColor(R.color.black));
+                                    sports.setTextColor(getResources().getColor(R.color.white));
+                                    Sports= "true";
+                                }
 
-                            }
-                            else {
-                                Map<String, Object> data = new HashMap<>();
-                                data.put("Sports", false);
-                                db.collection("8151033423").document("preference")
-                                        .set(data, SetOptions.merge());
-                                count++;
-                                sports.setBackgroundColor(getResources().getColor(R.color.white));
-                                sports.setTextColor(getResources().getColor(R.color.black));
-                            }
                         }
                     });
                         technology.setOnClickListener(new View.OnClickListener() {
-                            int count=0;
                             @Override
                             public void onClick(View view) {
-                                if(count%2==0){
+                                if(Technology.equals("true")){
+                                    Map<String, Object> data = new HashMap<>();
+                                    data.put("Technology", false);
+                                    db.collection("8151033423").document("preference")
+                                            .set(data, SetOptions.merge());
+                                    technology.setBackgroundColor(getResources().getColor(R.color.white));
+                                    technology.setTextColor(getResources().getColor(R.color.black));
+                                    Technology="false";
+
+                                }
+                                else {
                                     Map<String, Object> data = new HashMap<>();
                                     data.put("Technology", true);
                                     db.collection("8151033423").document("preference")
                                             .set(data, SetOptions.merge());
                                     technology.setBackgroundColor(getResources().getColor(R.color.black));
                                     technology.setTextColor(getResources().getColor(R.color.white));
-                                    count++;
-
-                                }
-                                else {
-                                    Map<String, Object> data = new HashMap<>();
-                                    data.put("Technology", false);
-                                    db.collection("8151033423").document("preference")
-                                            .set(data, SetOptions.merge());
-                                    count++;
-                                    technology.setBackgroundColor(getResources().getColor(R.color.white));
-                                    technology.setTextColor(getResources().getColor(R.color.black));
+                                    Technology="true";
                                 }
                             }
                         });
@@ -165,149 +165,143 @@ public class preference extends AppCompatActivity  {
                             int count=0;
                             @Override
                             public void onClick(View view) {
-                                if(count%2==0){
+                                if(Politics.equals("true")){
+                                    Map<String, Object> data = new HashMap<>();
+                                    data.put("Politics", false);
+                                    db.collection("8151033423").document("preference")
+                                            .set(data, SetOptions.merge());
+                                    politics.setBackgroundColor(getResources().getColor(R.color.white));
+                                    politics.setTextColor(getResources().getColor(R.color.black));
+                                    Politics="false";
+
+                                }
+                                else {
                                     Map<String, Object> data = new HashMap<>();
                                     data.put("Politics", true);
                                     db.collection("8151033423").document("preference")
                                             .set(data, SetOptions.merge());
                                     politics.setBackgroundColor(getResources().getColor(R.color.black));
                                     politics.setTextColor(getResources().getColor(R.color.white));
-                                    count++;
-
-                                }
-                                else {
-                                    Map<String, Object> data = new HashMap<>();
-                                    data.put("Politics", false);
-                                    db.collection("8151033423").document("preference")
-                                            .set(data, SetOptions.merge());
-                                    count++;
-                                    politics.setBackgroundColor(getResources().getColor(R.color.white));
-                                    politics.setTextColor(getResources().getColor(R.color.black));
+                                    Politics="true";
                                 }
                             }
                         });
                         entertainment.setOnClickListener(new View.OnClickListener() {
-                            int count=0;
                             @Override
                             public void onClick(View view) {
-                                if(count%2==0){
+                                if(Entertainment.equals("true")){
+                                    Map<String, Object> data = new HashMap<>();
+                                    data.put("Entertainment", false);
+                                    db.collection("8151033423").document("preference")
+                                            .set(data, SetOptions.merge());
+                                    entertainment.setBackgroundColor(getResources().getColor(R.color.white));
+                                    entertainment.setTextColor(getResources().getColor(R.color.black));
+                                    Entertainment="false";
+
+                                }
+                                else {
                                     Map<String, Object> data = new HashMap<>();
                                     data.put("Entertainment", true);
                                     db.collection("8151033423").document("preference")
                                             .set(data, SetOptions.merge());
                                     entertainment.setBackgroundColor(getResources().getColor(R.color.black));
                                     entertainment.setTextColor(getResources().getColor(R.color.white));
-                                    count++;
-
-                                }
-                                else {
-                                    Map<String, Object> data = new HashMap<>();
-                                    data.put("Entertainment", false);
-                                    db.collection("8151033423").document("preference")
-                                            .set(data, SetOptions.merge());
-                                    count++;
-                                    entertainment.setBackgroundColor(getResources().getColor(R.color.white));
-                                    entertainment.setTextColor(getResources().getColor(R.color.black));
+                                    Entertainment="true";
                                 }
                             }
                         });
                         education.setOnClickListener(new View.OnClickListener() {
-                            int count=0;
                             @Override
                             public void onClick(View view) {
-                                if(count%2==0){
+                                if(Education.equals("true")){
+                                    Map<String, Object> data = new HashMap<>();
+                                    data.put("Education", false);
+                                    db.collection("8151033423").document("preference")
+                                            .set(data, SetOptions.merge());
+                                    education.setBackgroundColor(getResources().getColor(R.color.white));
+                                    education.setTextColor(getResources().getColor(R.color.black));
+                                    Education="false";
+
+                                }
+                                else {
                                     Map<String, Object> data = new HashMap<>();
                                     data.put("Education", true);
                                     db.collection("8151033423").document("preference")
                                             .set(data, SetOptions.merge());
                                     education.setBackgroundColor(getResources().getColor(R.color.black));
                                     education.setTextColor(getResources().getColor(R.color.white));
-                                    count++;
-
-                                }
-                                else {
-                                    Map<String, Object> data = new HashMap<>();
-                                    data.put("Education", false);
-                                    db.collection("8151033423").document("preference")
-                                            .set(data, SetOptions.merge());
-                                    count++;
-                                    education.setBackgroundColor(getResources().getColor(R.color.white));
-                                    education.setTextColor(getResources().getColor(R.color.black));
+                                    Education="true";
                                 }
                             }
                         });
                         autonews.setOnClickListener(new View.OnClickListener() {
-                            int count=0;
                             @Override
                             public void onClick(View view) {
-                                if(count%2==0){
+                                if(Autonews.equals("true")){
+                                    Map<String, Object> data = new HashMap<>();
+                                    data.put("Autonews", false);
+                                    db.collection("8151033423").document("preference")
+                                            .set(data, SetOptions.merge());
+                                    autonews.setBackgroundColor(getResources().getColor(R.color.white));
+                                    autonews.setTextColor(getResources().getColor(R.color.black));
+                                    Autonews ="false";
+                                }
+                                else {
                                     Map<String, Object> data = new HashMap<>();
                                     data.put("Autonews", true);
                                     db.collection("8151033423").document("preference")
                                             .set(data, SetOptions.merge());
                                     autonews.setBackgroundColor(getResources().getColor(R.color.black));
                                     autonews.setTextColor(getResources().getColor(R.color.white));
-                                    count++;
-
-                                }
-                                else {
-                                    Map<String, Object> data = new HashMap<>();
-                                    data.put("Autonews", false);
-                                    db.collection("8151033423").document("preference")
-                                            .set(data, SetOptions.merge());
-                                    count++;
-                                    autonews.setBackgroundColor(getResources().getColor(R.color.white));
-                                    autonews.setTextColor(getResources().getColor(R.color.black));
+                                    Autonews="true";
                                 }
                             }
                         });
                         tib.setOnClickListener(new View.OnClickListener() {
-                            int count=0;
                             @Override
                             public void onClick(View view) {
-                                if(count%2==0){
+                                if(Tib.equals("true")){
+                                    Map<String, Object> data = new HashMap<>();
+                                    data.put("Tib", false);
+                                    db.collection("8151033423").document("preference")
+                                            .set(data, SetOptions.merge());
+                                    tib.setBackgroundColor(getResources().getColor(R.color.white));
+                                    tib.setTextColor(getResources().getColor(R.color.black));
+                                    Tib ="false";
+                                }
+                                else {
                                     Map<String, Object> data = new HashMap<>();
                                     data.put("Tib", true);
                                     db.collection("8151033423").document("preference")
                                             .set(data, SetOptions.merge());
                                     tib.setBackgroundColor(getResources().getColor(R.color.black));
                                     tib.setTextColor(getResources().getColor(R.color.white));
-                                    count++;
-
-                                }
-                                else {
-                                    Map<String, Object> data = new HashMap<>();
-                                    data.put("Tib", false);
-                                    db.collection("8151033423").document("preference")
-                                            .set(data, SetOptions.merge());
-                                    count++;
-                                    tib.setBackgroundColor(getResources().getColor(R.color.white));
-                                    tib.setTextColor(getResources().getColor(R.color.black));
+                                    Tib="true";
                                 }
                             }
                         });
                         fashion.setOnClickListener(new View.OnClickListener() {
-                            int count=0;
                             @Override
                             public void onClick(View view) {
-                                if(count%2==0){
+                                if(Fashion.equals("true")){
+                                    Map<String, Object> data = new HashMap<>();
+                                    data.put("Fashion", false);
+                                    db.collection("8151033423").document("preference")
+                                            .set(data, SetOptions.merge());
+                                    fashion.setBackgroundColor(getResources().getColor(R.color.white));
+                                    fashion.setTextColor(getResources().getColor(R.color.black));
+                                    Fashion="false";
+
+                                }
+                                else {
                                     Map<String, Object> data = new HashMap<>();
                                     data.put("Fashion", true);
                                     db.collection("8151033423").document("preference")
                                             .set(data, SetOptions.merge());
                                     fashion.setBackgroundColor(getResources().getColor(R.color.black));
                                     fashion.setTextColor(getResources().getColor(R.color.white));
-                                    count++;
+                                    Fashion="true";
 
-                                }
-                                else {
-                                    Map<String, Object> data = new HashMap<>();
-                                    data.put("Fashion", false);
-                                    db.collection("8151033423").document("preference")
-                                            .set(data, SetOptions.merge());
-                                    count++;
-                                    fashion.setBackgroundColor(getResources().getColor(R.color.white));
-                                    fashion.setTextColor(getResources().getColor(R.color.black));
                                 }
                             }
                         });

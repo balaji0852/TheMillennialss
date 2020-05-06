@@ -4,10 +4,12 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Pair;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,6 +21,7 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -32,7 +35,7 @@ public class tib extends AppCompatActivity {
     public RecyclerView news;
     public int count=0;
     newsadapter newspage;
-    String category="Politics";
+    String category="Talks in Bangalore";
     private String Sports,Politics,Technology,Autonews,Tib,Entertainment,Fashion,Education;
     String uno = "8151033423";
     ArrayList<String> data = new ArrayList<>();
@@ -63,6 +66,7 @@ public class tib extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tib);
         final Button nextpage = findViewById(R.id.nextcategory);
+        final ImageButton setting = findViewById(R.id.settings);
         news =findViewById(R.id.tib);
         final TextView title = findViewById(R.id.newstitle);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(tib.this);
@@ -105,9 +109,16 @@ public class tib extends AppCompatActivity {
                     data.add("Education");
                 }
                 if(Politics.equals("true")) {
-                    data.add("Education");
+                    data.add("Politics");
                 }
             } });
+
+        setting.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(tib.this,setting.class));
+            }
+        });
 
 
         nextpage.setOnClickListener(new View.OnClickListener() {
@@ -139,92 +150,13 @@ public class tib extends AppCompatActivity {
 
                            }
                            else{
-                               Toast.makeText(tib.this, "Your prefererence list is done.", Toast.LENGTH_SHORT).show();
+                               Toast.makeText(tib.this, "Your preference list is done.", Toast.LENGTH_SHORT).show();
+                               count=0;
+                               title.setText(data.get(count));
+                               category = data.get(count);;
+                               onStart();
                            }
 
-
-//                            else if(count==2){
-//                                 if (Fashion.equals("true")){
-//                                     title.setText("Fashion");
-//                                     category="Fashion";
-//                                     onStart();
-//                                 }
-//                                 else {
-//                                     count++;
-//                                 }
-//                            }
-//                            else if(count==3 ){
-//                                if (Entertainment.equals("true")) {
-//                                    title.setText("Entertainment");
-//                                    category = "Entertainment";
-//                                    onStart();
-//                                }
-//                                else {
-//                                    count++;
-//                                }
-//                            }
-//                            else if(count==4 ){
-//                                if( Autonews.equals("true")) {
-//                                    title.setText("Auto News");
-//                                    category = "Auto News";
-//                                    onStart();
-//                                }
-//                                else {
-//                                    count++;
-//                                }
-//                                }
-//                            else if(count==5){
-//                                if( Technology.equals("true")) {
-//                                    title.setText("Technology");
-//                                    category = "Technology";
-//                                    onStart();
-//                                }
-//                                else {
-//                                    count++;
-//                                }
-//                            }
-//                            else if(count==6){
-//                                if( Sports.equals("true")) {
-//                                    title.setText("Sports");
-//                                    category = "Sports";
-//                                    onStart();
-//                                }
-//                                else {
-//                                    count++;
-//                                }
-//                            }
-//
-//                            else if(count==7){
-//                                if(Education.equals("true")) {
-//                                    title.setText("Education");
-//                                    category = "Education";
-//                                    onStart();
-//                                }
-//                                else {
-//                                    count++;
-//                                }
-//                            }
-//                            else if(count==8){
-//                                if( Politics.equals("true")) {
-//                                    title.setText("Politics");
-//                                    category = "Politics";
-//                                    onStart();
-//                                }
-//                                else {
-//                                    count++;
-//                                }
-//                            }
-//                            else if(count==9){
-//                                title.setText("Novel Corona");
-//                                category="Novel Corona";
-//                                onStart();
-//                            }
-//                            else{
-//                                title.setText("Talks in Bangalore");
-//                                category="Talks in Bangalore";
-//                                onStart();
-//                                count=0;
-//                            }
 
                 }
 

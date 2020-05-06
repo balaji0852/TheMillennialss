@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".setting">
+
+    <TextView
+        android:id="@+id/preference"
+        android:layout_width="94dp"
+        android:layout_height="44dp"
+        android:fontFamily="@font/bangers"
+        android:text="Settings"
+        android:textAlignment="center"
+        android:textColor="@color/red"
+        android:textSize="28sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.069" />
+
+    <TextView
+        android:id="@+id/personalise"
+        android:layout_width="351dp"
+        android:layout_height="70dp"
+        android:layout_marginTop="1dp"
+        android:background="@drawable/news"
+        android:fontFamily="@font/bangers"
+        android:paddingLeft="15dp"
+        android:paddingTop="8dp"
+        android:text="personalise"
+        android:textColor="@color/black"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/profile"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="296dp"
+        android:layout_height="25dp"
+        android:layout_marginStart="95dp"
+        android:layout_marginTop="36dp"
+        android:layout_marginEnd="199dp"
+        android:fontFamily="@font/bangers"
+        android:text="set news preference, your kind news."
+        android:textColor="@color/black"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="@+id/personalise"
+        app:layout_constraintHorizontal_bias="0.326"
+        app:layout_constraintStart_toStartOf="@+id/personalise"
+        app:layout_constraintTop_toTopOf="@+id/personalise" />
+
+    <TextView
+        android:id="@+id/profile"
+        android:layout_width="351dp"
+        android:layout_height="70dp"
+        android:background="@drawable/news"
+        android:fontFamily="@font/bangers"
+        android:paddingLeft="15dp"
+        android:paddingTop="8dp"
+        android:text="Your profile"
+        android:textColor="@color/black"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/preference"
+        app:layout_constraintVertical_bias="0.068" />
+
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="logout"
+        android:background="@drawable/news"
+        android:fontFamily="@font/bangers"
+        android:textColor="@color/black"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.532"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView3"
+        app:layout_constraintVertical_bias="0.893" />
+
+    <TextView
+        android:id="@+id/policy"
+        android:layout_width="351dp"
+        android:layout_height="70dp"
+        android:layout_marginTop="1dp"
+        android:background="@drawable/news"
+        android:fontFamily="@font/bangers"
+        android:paddingLeft="15dp"
+        android:paddingTop="8dp"
+        android:text="our policy"
+        android:textColor="@color/black"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/personalise"
+        app:layout_constraintVertical_bias="0.0" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

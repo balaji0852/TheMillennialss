@@ -3,23 +3,18 @@ package com.tmv01.themillennial;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
+import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.graphics.Typeface;
 import android.os.Bundle;
-import android.service.autofill.TextValueSanitizer;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
+import android.widget.ImageButton;
 import android.widget.Toast;
-
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -35,7 +30,6 @@ public class firstpage extends AppCompatActivity {
     firstpageadapter pageadapter;
     cyclebottom bottomadapter;
     public static final String DATE_FORMAT ="yyyy-MM-dd";
-    int zero =0;
     String udate;
     @Override
     public void onStart() {
@@ -43,7 +37,7 @@ public class firstpage extends AppCompatActivity {
 
         if(getIntent().getStringExtra("date")==null)
         {
-            SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT);
+            @SuppressLint("SimpleDateFormat") SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT);
             dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
             Date today = Calendar.getInstance().getTime();
             udate = dateFormat.format(today);
@@ -52,12 +46,14 @@ public class firstpage extends AppCompatActivity {
             udate = getIntent().getStringExtra("date");
         }
 
+        assert udate != null;
         db.collection(udate).document("First page").collection("news").whereEqualTo("category","First page")
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
                     public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
 
                         leftdata.clear();
+                        assert queryDocumentSnapshots != null;
                         for (QueryDocumentSnapshot retrievedDocSnap : queryDocumentSnapshots) {
 
                             firstpagedata left = retrievedDocSnap.toObject(firstpagedata.class);
@@ -71,11 +67,12 @@ public class firstpage extends AppCompatActivity {
     }
 
 
+    @SuppressLint("RestrictedApi")
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_firstpage);
-        TextView title= findViewById(R.id.title);
+//        final TextView title= findViewById(R.id.title);
         Toast.makeText(firstpage.this,udate,Toast.LENGTH_LONG).show();
         Button page2= findViewById(R.id.page3);
         firstleftdata = findViewById(R.id.cycleleft);
@@ -90,6 +87,16 @@ public class firstpage extends AppCompatActivity {
         firstleftdata.setAdapter(pageadapter);
         bottomadapter= new cyclebottom(firstpage.this,leftdata);
         firstpagebottom.setAdapter(bottomadapter);
+        ImageButton date=findViewById(R.id.date);
+
+
+        date.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(firstpage.this,Main2Activity.class));
+                finish();
+            }
+        });
 
         page2.setOnClickListener(new View.OnClickListener() {
             @Override

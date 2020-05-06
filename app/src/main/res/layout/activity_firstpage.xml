@@ -1,101 +1,97 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+ <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".MainActivity"
+    android:id="@+id/mainlayout">
 
-    <RelativeLayout
-        android:id="@+id/headline"
-        android:layout_width="409dp"
-        android:layout_height="729dp"
-        android:layout_marginStart="1dp"
-        android:layout_marginTop="1dp"
-        android:layout_marginEnd="1dp"
-        android:layout_marginBottom="1dp"
+
+     <TextView
+         android:id="@+id/title"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_marginBottom="1dp"
+         android:fontFamily="@font/bangers"
+         android:text="@string/app_name"
+         android:textColor="@color/red"
+         android:textSize="45sp"
+         app:layout_constraintBottom_toTopOf="@id/Headlinebackground"
+         app:layout_constraintEnd_toEndOf="parent"
+         app:layout_constraintHorizontal_bias="0.159"
+         app:layout_constraintStart_toStartOf="parent"
+         app:layout_constraintTop_toTopOf="parent"
+         app:layout_constraintVertical_bias="0.757" />
+
+     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/cycleleft"
+        android:layout_width="350dp"
+        android:layout_height="300dp"
+         android:layout_marginBottom="1dp"
+        app:layout_constraintBottom_toTopOf="@+id/cyclebottom"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.491"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.972" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/cyclebottom"
+        android:layout_width="350dp"
+        android:layout_height="190dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.491"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/Headlinebackground"
+        android:layout_width="350dp"
+        android:layout_height="110dp"
+        android:layout_marginTop="63dp"
+        android:layout_marginBottom="1dp"
+        android:background="@drawable/corner_white"
+        android:fontFamily="@font/bangers"
+        android:paddingLeft="25dp"
+        android:text="Corona patient count all over  world increase. The World is in panic. Health workers  ,police and government are doing their best. #stayhomestaysafe"
+        android:textColor="@color/white"
+        android:textSize="22sp"
+        app:layout_constraintBottom_toTopOf="@+id/cycleleft"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.491"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0" />
 
-        <TextView
-            android:id="@+id/title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentBottom="true"
-            android:layout_marginStart="25dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginEnd="15dp"
-            android:layout_marginBottom="658dp"
-            android:fontFamily="@font/bungee_shade"
-            android:text="@string/app_name"
-            android:textColor="@color/red"
-            android:textSize="33sp" />
+    <Button
+        android:id="@+id/page3"
+        android:layout_width="89dp"
+        android:layout_height="52dp"
+        android:background="@drawable/news"
+        android:fontFamily="@font/bangers"
+        android:text="Next"
+        android:textSize="25sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.95"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.976" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/cycleleft"
-            android:layout_width="wrap_content"
-            android:layout_height="307dp"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentBottom="true"
-            android:layout_marginStart="30dp"
-            android:layout_marginTop="201dp"
-            android:layout_marginEnd="25dp"
-            android:layout_marginBottom="221dp" />
+    <ImageButton
+        android:id="@+id/date"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/corners"
+        app:layout_constraintBottom_toTopOf="@+id/Headlinebackground"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.337"
+        app:layout_constraintStart_toEndOf="@+id/title"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.902"
+        app:srcCompat="@drawable/ic_date_range_black_24dp"/>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/cyclebottom"
-            android:layout_width="wrap_content"
-            android:layout_height="220dp"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentBottom="true"
-            android:layout_marginStart="30dp"
-            android:layout_marginTop="513dp"
-            android:layout_marginEnd="25dp"
-            android:layout_marginBottom="10dp" />
 
-        <TextView
-            android:id="@+id/Headlinebackgroung"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentBottom="true"
-            android:layout_marginStart="30dp"
-            android:layout_marginTop="79dp"
-            android:layout_marginEnd="25dp"
-            android:layout_marginBottom="529dp"
-            android:background="@drawable/corner_white"
-            android:fontFamily="sans-serif-black"
-            android:paddingLeft="10dp"
-            android:paddingRight="5dp"
-            android:text="Someone New to Platform trying provide good news to mankind. TM from agrowth"
-            android:textAllCaps="true"
-            android:textColor="@color/white"
-            android:textSize="22sp" />
-
-        <Button
-            android:id="@+id/page3"
-            android:layout_width="wrap_content"
-            android:layout_height="48dp"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentBottom="true"
-            android:layout_marginStart="265dp"
-            android:layout_marginTop="642dp"
-            android:layout_marginEnd="31dp"
-            android:layout_marginBottom="39dp"
-            android:text="Next" />
-
-    </RelativeLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
