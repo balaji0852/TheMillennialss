@@ -14,7 +14,14 @@ public class setting extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting);
         final TextView preference = findViewById(R.id.personalise);
+        TextView saved = findViewById(R.id.savednews);
 
+        saved.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(setting.this,saved.class));
+            }
+        });
         preference.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

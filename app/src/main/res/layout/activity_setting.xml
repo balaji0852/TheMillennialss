@@ -107,4 +107,41 @@
         app:layout_constraintTop_toBottomOf="@+id/personalise"
         app:layout_constraintVertical_bias="0.0" />
 
+    <TextView
+        android:id="@+id/savednews"
+        android:layout_width="351dp"
+        android:layout_height="70dp"
+        android:layout_marginTop="1dp"
+        android:background="@drawable/news"
+        android:fontFamily="@font/bangers"
+        android:paddingLeft="15dp"
+        android:paddingTop="8dp"
+        android:text="Saved"
+        android:textColor="@color/black"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/policy"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="296dp"
+        android:layout_height="25dp"
+        android:layout_marginStart="17dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="38dp"
+        android:layout_marginBottom="57dp"
+        android:fontFamily="@font/bangers"
+        android:text="All your Starred news."
+        android:textColor="@color/black"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="@+id/savednews"
+        app:layout_constraintEnd_toEndOf="@+id/savednews"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/savednews"
+        app:layout_constraintTop_toTopOf="@+id/savednews"
+        app:layout_constraintVertical_bias="0.0" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

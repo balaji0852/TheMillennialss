@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/tib"
     android:layout_width="350dp"
-    android:layout_height="250dp"
+    android:layout_height="300dp"
     android:layout_marginTop="5dp"
     android:layout_marginBottom="5dp"
     android:background="@drawable/corners"
@@ -13,34 +13,95 @@
 
     <ImageView
         android:id="@+id/tibimage"
-        android:layout_width="263dp"
-        android:layout_height="146dp"
+        android:layout_width="325dp"
+        android:layout_height="148dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginStart="43dp"
-        android:layout_marginTop="95dp"
-        android:layout_marginEnd="44dp"
-        android:layout_marginBottom="9dp" />
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="94dp"
+        android:layout_marginEnd="9dp"
+        android:layout_marginBottom="58dp" />
 
     <TextView
         android:id="@+id/tibtext"
-        android:layout_width="318dp"
-        android:layout_height="50dp"
+        android:layout_width="327dp"
+        android:layout_height="76dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginStart="15dp"
+        android:layout_marginStart="10dp"
         android:layout_marginTop="15dp"
-        android:layout_marginEnd="15dp"
-        android:layout_marginBottom="160dp"
+        android:layout_marginEnd="9dp"
+        android:layout_marginBottom="209dp"
         android:background="@color/white"
         android:fontFamily="@font/bangers"
         android:text="TextView"
         android:textColor="@color/black"
         android:textSize="17sp" />
+
+    <ImageButton
+        android:id="@+id/saved"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="122dp"
+        android:layout_marginTop="248dp"
+        android:layout_marginEnd="187dp"
+        android:layout_marginBottom="7dp"
+        app:srcCompat="@drawable/ic_grade_black_24dp" />
+
+    <ImageButton
+        android:id="@+id/like"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="287dp"
+        android:layout_marginTop="246dp"
+        android:layout_marginEnd="17dp"
+        android:layout_marginBottom="7dp"
+        app:srcCompat="@drawable/ic_favorite_black_24dp" />
+
+    <TextView
+        android:id="@+id/viewcount"
+        android:layout_width="103dp"
+        android:layout_height="28dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="11dp"
+        android:layout_marginTop="250dp"
+        android:layout_marginEnd="236dp"
+        android:layout_marginBottom="22dp"
+        android:fontFamily="@font/bangers"
+        android:text="0 views"
+        android:textColor="@color/red"
+        android:textSize="15sp" />
+
+    <TextView
+        android:id="@+id/nlikes"
+        android:layout_width="72dp"
+        android:layout_height="23dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="215dp"
+        android:layout_marginTop="249dp"
+        android:layout_marginEnd="63dp"
+        android:layout_marginBottom="28dp"
+        android:fontFamily="@font/bangers"
+        android:text="0 likes"
+        android:textSize="15sp" />
 
 </RelativeLayout>
 

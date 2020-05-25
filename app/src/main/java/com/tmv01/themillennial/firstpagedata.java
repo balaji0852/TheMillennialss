@@ -4,11 +4,12 @@ import android.media.Image;
 
 public class firstpagedata {
     String aid,category,date,headline,poname,image,textualdata;
-    Integer Views;
+    Integer Views,likes;
 
 
 
-    public firstpagedata(String aid, String category, String date, String headline, String poname, String image, String textualdata, Integer views){
+    public firstpagedata(String aid, String category, String date, String headline, String poname, String image, String textualdata,
+                         Integer views,Integer likes){
         this.aid = aid;
         this.category = category;
         this.date = date;
@@ -17,12 +18,17 @@ public class firstpagedata {
         this.image = image;
         this.textualdata = textualdata;
         this.Views = views;
+        this.likes = likes;
+
     }
 
     public firstpagedata(){
 
     }
 
+    public Integer getLikes() {
+        return likes;
+    }
 
     public String getAid() {
         return aid;

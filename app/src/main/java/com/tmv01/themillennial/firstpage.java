@@ -80,7 +80,7 @@ public class firstpage extends AppCompatActivity {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(firstpage.this);
         RecyclerView.LayoutManager layoutManager1 = new LinearLayoutManager(firstpage.this);
         ((LinearLayoutManager) layoutManager).setOrientation(RecyclerView.HORIZONTAL);
-        ((LinearLayoutManager) layoutManager1).setOrientation(RecyclerView.VERTICAL);
+        ((LinearLayoutManager) layoutManager1).setOrientation(RecyclerView.HORIZONTAL);
         firstleftdata.setLayoutManager(layoutManager);
         firstpagebottom.setLayoutManager(layoutManager1);
         pageadapter  = new firstpageadapter(firstpage.this, leftdata);

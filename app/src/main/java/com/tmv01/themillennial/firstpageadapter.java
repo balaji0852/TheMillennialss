@@ -5,10 +5,20 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.SetOptions;
 import com.squareup.picasso.Picasso;
 import androidx.annotation.NonNull;
@@ -47,9 +57,54 @@ public class firstpageadapter extends RecyclerView.Adapter<firstpageadapter.MyVi
         public void onBindViewHolder(@NonNull final MyViewHolder myViewHolder, int i) {
         final firstpagedata dataleft=firstpageleftdata.get(i);
         myViewHolder.text.setText(dataleft.getHeadline());
-        myViewHolder.views.setText(  ":"+dataleft.getViews()+"views");
+        myViewHolder.views.setText(  dataleft.getViews()+" views");
+        myViewHolder.likes.setText(dataleft.getLikes()+ " Likes");
         Picasso.get().load(dataleft.getImage()).placeholder(R.mipmap.ic_launcher).fit().centerCrop().into(myViewHolder.image);
 
+            myViewHolder.liked.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    final CollectionReference db =  FirebaseFirestore.getInstance().collection(dataleft.getDate()).
+                            document("First page").collection("news");
+
+
+                    db.whereEqualTo("headline",dataleft.getHeadline()).get().
+                            addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                @Override
+                                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                    if(task.isSuccessful()){
+                                        for (QueryDocumentSnapshot document : task.getResult()) {
+                                            Map<String, Object> liked = new HashMap<>();
+                                            liked.put("likes", dataleft.getLikes()+1);
+                                            db.document(document.getId()).set(liked,SetOptions.merge());
+//                                            Map<String, Object> uliked = new HashMap<>();
+//                                            liked.put("8151033423", true);
+                                        }
+                                    }
+                                }
+                            });
+                }
+            });
+
+        myViewHolder.save.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FirebaseFirestore.getInstance().collection("8151033423").document(dataleft.getCategory()).
+                        collection(dataleft.getDate()).whereEqualTo("headline",dataleft.getHeadline()).get().
+                        addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                if (task.getResult().size()==0) {
+                                    Map<String, Object> saved = new HashMap<>();
+                                    saved.put("headline", dataleft.getHeadline());
+                                    FirebaseFirestore.getInstance().collection("8151033423").document(dataleft.getCategory()).
+                                            collection(dataleft.getDate()).document().set(saved);
+                                    Toast.makeText(context, "News saved successfully.", Toast.LENGTH_SHORT).show();
+                                } else {
+                                    Toast.makeText(context, "News already exist in your archive.", Toast.LENGTH_SHORT).show();
+                                }
+                            }});
+            }});
 
         myViewHolder.image.setOnClickListener(new View.OnClickListener() {
             Intent data;
@@ -99,17 +154,22 @@ public class firstpageadapter extends RecyclerView.Adapter<firstpageadapter.MyVi
 
         public class MyViewHolder extends RecyclerView.ViewHolder
         {
-            TextView text,views;
+            TextView text,views,likes;
             ImageView image;
+            ImageButton liked,save;
             RelativeLayout block;
+
 
 
             public MyViewHolder(@NonNull final View itemView)
             {
                 super(itemView);
+                likes = itemView.findViewById(R.id.nlikes);
+                liked= itemView.findViewById(R.id.like);
                 text = itemView.findViewById(R.id.tbtext);
                 views = itemView.findViewById(R.id.viewcount);
                 image= itemView.findViewById(R.id.timage);
+                save =itemView.findViewById(R.id.saved);
                 block = itemView.findViewById(R.id.block);
             }
         }

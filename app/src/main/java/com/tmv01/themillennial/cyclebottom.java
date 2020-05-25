@@ -44,45 +44,38 @@ public class cyclebottom extends RecyclerView.Adapter<cyclebottom.MyViewHolder> 
         final firstpagedata dataleft=firstpagebottomdata.get(i);
         myViewHolder.text.setText(dataleft.getHeadline());
         Picasso.get().load(dataleft.getImage()).placeholder(R.mipmap.ic_launcher).fit().centerCrop().into(myViewHolder.image);
+
         myViewHolder.image.setOnClickListener(new View.OnClickListener() {
-            Intent data;
             @Override
             public void onClick(View v ) {
-
-                data=new Intent(v.getContext(),news.class);
+                Intent data = new Intent(v.getContext(), news.class);
+                data.putExtra("date",dataleft.getDate());
+                data.putExtra("category",dataleft.getCategory());
                 data.putExtra("headline",dataleft.getHeadline());
                 data.putExtra("image",dataleft.getImage());
                 data.putExtra("textualdata",dataleft.getTextualdata());
                 data.putExtra("title","The Millennial");
+                Integer views  = dataleft.getViews()+1;
+                data.putExtra("views", views);
                 v.getContext().startActivity(data);
             }
         });
         myViewHolder.text.setOnClickListener(new View.OnClickListener() {
-            Intent data;
             @Override
             public void onClick(View v ) {
-
-                data=new Intent(v.getContext(),news.class);
+                Intent data = new Intent(v.getContext(), news.class);
+                data.putExtra("date",dataleft.getDate());
+                data.putExtra("category",dataleft.getCategory());
                 data.putExtra("headline",dataleft.getHeadline());
                 data.putExtra("image",dataleft.getImage());
                 data.putExtra("textualdata",dataleft.getTextualdata());
                 data.putExtra("title","The Millennial");
+                Integer views  = dataleft.getViews()+1;
+                data.putExtra("views", views);
                 v.getContext().startActivity(data);
             }
         });
-//        myViewHolder.block.setOnClickListener(new View.OnClickListener() {
-//            Intent data;
-//            @Override
-//            public void onClick(View v ) {
-//
-//                data=new Intent(v.getContext(),news.class);
-//                data.putExtra("headline",dataleft.getHeadline());
-//                data.putExtra("image",dataleft.getImage());
-//                data.putExtra("textualdata",dataleft.getTextualdata());
-//                data.putExtra("title","First Page");
-//                v.getContext().startActivity(data);
-//            }
-//        });
+
 
     }
 
@@ -96,7 +89,6 @@ public class cyclebottom extends RecyclerView.Adapter<cyclebottom.MyViewHolder> 
     {
         TextView text;
         ImageView image;
-        RelativeLayout block;
 
         public MyViewHolder(@NonNull final View itemView)
         {
@@ -104,7 +96,6 @@ public class cyclebottom extends RecyclerView.Adapter<cyclebottom.MyViewHolder> 
 
             text = itemView.findViewById(R.id.tbtext);
             image= itemView.findViewById(R.id.timage);
-            block = itemView.findViewById(R.id.tib);
 
 
 
