@@ -11,10 +11,12 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCanceledListener;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
@@ -34,6 +36,9 @@ public class savedadapter extends RecyclerView.Adapter<savedadapter.MyViewHolder
 
     Context context;
     ArrayList<savedpagedata> savedpagedatas;
+    Number likes,views;
+    String text;
+
 
 
     public savedadapter(Context context, ArrayList<savedpagedata> savedpagedatas) {
@@ -61,20 +66,48 @@ public class savedadapter extends RecyclerView.Adapter<savedadapter.MyViewHolder
             Intent data;
             @Override
             public void onClick(View v ) {
-                data = new Intent(v.getContext(), news.class);
+//
+//                data=new Intent(v.getContext(),news.class);
+//                data.putExtra("date",dataleft.getDate());
+//                data.putExtra("category",dataleft.getCategory());
+//                data.putExtra("headline",dataleft.getHeadline());
+//                data.putExtra("image",dataleft.getImage());
+//                CollectionReference db=FirebaseFirestore.getInstance().collection(dataleft.getDate()).
+//                        document(dataleft.getCategory()).collection("news");
+//                db.whereEqualTo("headline",dataleft.getHeadline()).get().
+//                        addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+//                            @Override
+//                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+//                                if(task.isSuccessful()){
+//                                    for (QueryDocumentSnapshot document : task.getResult()) {
+//                                        text = document.getString("textualdata");
+//                                        likes = (Number) document.get("likes");
+//                                        views = (Number) document.get("views");
+//                                    }
+//                                }
+//                            }
+//                        });
+//                data.putExtra("textualdata",text);
+//                data.putExtra("likes",likes);
+//                data.putExtra("views",views);
+//                data.putExtra("title","The Millennial");
+//                v.getContext().startActivity(data);
+                data=new Intent(v.getContext(),news.class);
                 data.putExtra("date",dataleft.getDate());
                 data.putExtra("category",dataleft.getCategory());
                 data.putExtra("headline",dataleft.getHeadline());
                 data.putExtra("image",dataleft.getImage());
                 data.putExtra("title","The Millennial");
                 v.getContext().startActivity(data);
-            }
-        });
+
+                }
+            });
         myViewHolder.text.setOnClickListener(new View.OnClickListener() {
             Intent data;
             @Override
             public void onClick(View v ) {
-                data = new Intent(v.getContext(), news.class);
+
+                data=new Intent(v.getContext(),news.class);
                 data.putExtra("date",dataleft.getDate());
                 data.putExtra("category",dataleft.getCategory());
                 data.putExtra("headline",dataleft.getHeadline());
@@ -87,7 +120,8 @@ public class savedadapter extends RecyclerView.Adapter<savedadapter.MyViewHolder
             Intent data;
             @Override
             public void onClick(View v ) {
-                data = new Intent(v.getContext(), news.class);
+
+                data=new Intent(v.getContext(),news.class);
                 data.putExtra("date",dataleft.getDate());
                 data.putExtra("category",dataleft.getCategory());
                 data.putExtra("headline",dataleft.getHeadline());
