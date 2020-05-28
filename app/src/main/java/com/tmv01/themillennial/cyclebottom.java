@@ -54,6 +54,7 @@ public class cyclebottom extends RecyclerView.Adapter<cyclebottom.MyViewHolder> 
                 data.putExtra("headline",dataleft.getHeadline());
                 data.putExtra("image",dataleft.getImage());
                 data.putExtra("textualdata",dataleft.getTextualdata());
+                data.putExtra("likes",dataleft.getLikes());
                 data.putExtra("title","The Millennial");
                 Integer views  = dataleft.getViews()+1;
                 data.putExtra("views", views);
@@ -69,6 +70,7 @@ public class cyclebottom extends RecyclerView.Adapter<cyclebottom.MyViewHolder> 
                 data.putExtra("headline",dataleft.getHeadline());
                 data.putExtra("image",dataleft.getImage());
                 data.putExtra("textualdata",dataleft.getTextualdata());
+                data.putExtra("likes",dataleft.getLikes());
                 data.putExtra("title","The Millennial");
                 Integer views  = dataleft.getViews()+1;
                 data.putExtra("views", views);

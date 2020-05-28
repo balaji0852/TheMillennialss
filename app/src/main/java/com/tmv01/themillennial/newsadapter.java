@@ -90,16 +90,18 @@ public class newsadapter extends RecyclerView.Adapter<newsadapter.MyViewHolder> 
         myViewHolder.save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                FirebaseFirestore.getInstance().collection("8151033423").document(dataleft.getCategory()).
-                        collection(dataleft.getDate()).whereEqualTo("headline",dataleft.getHeadline()).get().
+                FirebaseFirestore.getInstance().collection("8151033423").document("saved").collection("news").whereEqualTo("headline",dataleft.getHeadline()).get().
                         addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                             @Override
                             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                                 if (task.getResult().size()==0) {
                                     Map<String, Object> saved = new HashMap<>();
+                                    saved.put("image", dataleft.getImage());
                                     saved.put("headline", dataleft.getHeadline());
-                                    FirebaseFirestore.getInstance().collection("8151033423").document(dataleft.getCategory()).
-                                            collection(dataleft.getDate()).document().set(saved);
+                                    saved.put("category",dataleft.getCategory());
+                                    saved.put("date",dataleft.getDate());
+                                    FirebaseFirestore.getInstance().collection("8151033423").document("saved")
+                                            .collection("news").document().set(saved);
                                     Toast.makeText(context, "News saved successfully.", Toast.LENGTH_SHORT).show();
                                 } else {
                                     Toast.makeText(context, "News already exist in your archive.", Toast.LENGTH_SHORT).show();
@@ -117,6 +119,7 @@ public class newsadapter extends RecyclerView.Adapter<newsadapter.MyViewHolder> 
                 data.putExtra("headline",dataleft.getHeadline());
                 data.putExtra("image",dataleft.getImage());
                 data.putExtra("textualdata",dataleft.getTextualdata());
+                data.putExtra("likes",dataleft.getLikes());
                 data.putExtra("title","The Millennial");
                 Integer views  = dataleft.getViews()+1;
                 data.putExtra("views", views);
@@ -134,6 +137,7 @@ public class newsadapter extends RecyclerView.Adapter<newsadapter.MyViewHolder> 
                 data.putExtra("headline",dataleft.getHeadline());
                 data.putExtra("image",dataleft.getImage());
                 data.putExtra("textualdata",dataleft.getTextualdata());
+                data.putExtra("likes",dataleft.getLikes());
                 data.putExtra("title","The Millennial");
                 Integer views  = dataleft.getViews()+1;
                 data.putExtra("views", views);
