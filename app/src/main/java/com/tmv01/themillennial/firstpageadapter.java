@@ -62,28 +62,25 @@ public class firstpageadapter extends RecyclerView.Adapter<firstpageadapter.MyVi
         Picasso.get().load(dataleft.getImage()).placeholder(R.mipmap.ic_launcher).fit().centerCrop().into(myViewHolder.image);
 
             myViewHolder.liked.setOnClickListener(new View.OnClickListener() {
+
                 @Override
                 public void onClick(View view) {
                     final CollectionReference db =  FirebaseFirestore.getInstance().collection(dataleft.getDate()).
                             document("First page").collection("news");
 
-
-
-                    db.whereEqualTo("headline",dataleft.getHeadline()).get().
-                            addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                                @Override
-                                public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                    if(task.isSuccessful()){
-                                        for (QueryDocumentSnapshot document : task.getResult()) {
-                                            Map<String, Object> liked = new HashMap<>();
-                                            liked.put("likes", dataleft.getLikes()+1);
-                                            db.document(document.getId()).set(liked,SetOptions.merge());
-//                                            Map<String, Object> uliked = new HashMap<>();
-//                                            liked.put("8151033423", true);
+                        db.whereEqualTo("headline",dataleft.getHeadline()).get().
+                                addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                        if(task.isSuccessful()){
+                                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                                Map<String, Object> liked = new HashMap<>();
+                                                liked.put("likes", dataleft.getLikes()+1);
+                                                db.document(document.getId()).set(liked,SetOptions.merge());
+                                            }
                                         }
                                     }
-                                }
-                            });
+                                });
                 }
             });
 
@@ -120,6 +117,7 @@ public class firstpageadapter extends RecyclerView.Adapter<firstpageadapter.MyVi
                 data.putExtra("image",dataleft.getImage());
                 data.putExtra("textualdata",dataleft.getTextualdata());
                 data.putExtra("likes",dataleft.getLikes());
+                data.putExtra("savednews","false");
                 data.putExtra("title","The Millennial");
                 Integer views  = dataleft.getViews()+1;
                 data.putExtra("views", views);
@@ -138,6 +136,7 @@ public class firstpageadapter extends RecyclerView.Adapter<firstpageadapter.MyVi
                     data.putExtra("image",dataleft.getImage());
                     data.putExtra("textualdata",dataleft.getTextualdata());
                     data.putExtra("likes",dataleft.getLikes());
+                    data.putExtra("savednews","false");
                     data.putExtra("title","The Millennial");
                     Integer views  = dataleft.getViews()+1;
                     data.putExtra("views", views);

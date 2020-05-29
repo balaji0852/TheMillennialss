@@ -66,11 +66,85 @@ public class newsadapter extends RecyclerView.Adapter<newsadapter.MyViewHolder> 
         myViewHolder.like.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final CollectionReference db =  FirebaseFirestore.getInstance().collection(dataleft.getDate()).
+                FirebaseFirestore db = FirebaseFirestore.getInstance();
+                final CollectionReference newsdata =  db.collection(dataleft.getDate()).
                         document(dataleft.getCategory()).collection("news");
+                final CollectionReference likeddata =db.collection("8151033423");
 
+//                likeddata.whereEqualTo("headline",dataleft.getHeadline())
+//                        .get().
+//                        addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+//                            @Override
+//                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+//                                if(task.isSuccessful()) {
+//                                    for (QueryDocumentSnapshot document : task.getResult()) {
+//                                        if ((Boolean) document.get("liked").equals(true)) {
+//                                            Map<String, Object> likesytem = new HashMap<>();
+//                                            likesytem.put("liked", false);
+//                                            likeddata.document(document.getId()).set(likesytem, SetOptions.merge());
+//
+//                                            newsdata.whereEqualTo("headline",dataleft.getHeadline()).get().
+//                                                    addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+//                                                        @Override
+//                                                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+//                                                            if(task.isSuccessful()){
+//                                                                for (QueryDocumentSnapshot document : task.getResult()) {
+//                                                                    Map<String, Object> liked = new HashMap<>();
+//                                                                    liked.put("likes", dataleft.getLikes()-1);
+//                                                                    newsdata.document(document.getId()).set(liked,SetOptions.merge());
+//                                                                    Toast.makeText(context, "Disliked", Toast.LENGTH_SHORT).show();
+//
+//                                                                }
+//                                                            }
+//                                                        }
+//                                                    });
+//                                        } else {
+//                                            Map<String, Object> likesytem = new HashMap<>();
+//                                            likesytem.put("liked", true);
+//                                            likeddata.document(document.getId()).set(likesytem, SetOptions.merge());
+//                                            Toast.makeText(context, "liked", Toast.LENGTH_SHORT).show();
+//                                            newsdata.whereEqualTo("headline",dataleft.getHeadline()).get().
+//                                                    addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+//                                                        @Override
+//                                                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+//                                                            if(task.isSuccessful()){
+//                                                                for (QueryDocumentSnapshot document : task.getResult()) {
+//                                                                    Map<String, Object> liked = new HashMap<>();
+//                                                                    liked.put("likes", dataleft.getLikes()+1);
+//                                                                    newsdata.document(document.getId()).set(liked,SetOptions.merge());
+//                                                                }
+//                                                            }
+//                                                        }
+//                                                    });
+//                                        }
+//                                    }
+//                                }
+//                                 }}).addOnFailureListener(new OnFailureListener() {
+//                                    @Override
+//                                    public void onFailure(@NonNull Exception e) {
+//                                        Map<String, Object> likesytem = new HashMap<>();
+//                                        likesytem.put("headline", dataleft.getHeadline());
+//                                        likesytem.put("liked","true");
+//                                        likeddata.document().set(likesytem);
+//
+//                                    newsdata.whereEqualTo("headline",dataleft.getHeadline()).get().
+//                                            addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+//                                                @Override
+//                                                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+//                                                    if(task.isSuccessful()){
+//                                                        for (QueryDocumentSnapshot document : task.getResult()) {
+//                                                            Map<String, Object> liked = new HashMap<>();
+//                                                            liked.put("likes", dataleft.getLikes()+1);
+//                                                            newsdata.document(document.getId()).set(liked,SetOptions.merge());
+//                                                            Toast.makeText(context, "liked", Toast.LENGTH_SHORT).show();
+//                                                        }
+//                                                    }
+//                                                }
+//                                            });
+//                                    }
+//                                });
 
-                        db.whereEqualTo("headline",dataleft.getHeadline()).get().
+                newsdata.whereEqualTo("headline",dataleft.getHeadline()).get().
                         addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                             @Override
                             public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -78,15 +152,15 @@ public class newsadapter extends RecyclerView.Adapter<newsadapter.MyViewHolder> 
                                     for (QueryDocumentSnapshot document : task.getResult()) {
                                         Map<String, Object> liked = new HashMap<>();
                                         liked.put("likes", dataleft.getLikes()+1);
-                                        db.document(document.getId()).set(liked,SetOptions.merge());
-//                                        Map<String, Object> uliked = new HashMap<>();
-//                                        liked.put("8151033423", true);
+                                        newsdata.document(document.getId()).set(liked,SetOptions.merge());
+//                                        Toast.makeText(context, "liked", Toast.LENGTH_SHORT).show();
                                     }
                                 }
                             }
                         });
             }
         });
+
         myViewHolder.save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -120,6 +194,7 @@ public class newsadapter extends RecyclerView.Adapter<newsadapter.MyViewHolder> 
                 data.putExtra("image",dataleft.getImage());
                 data.putExtra("textualdata",dataleft.getTextualdata());
                 data.putExtra("likes",dataleft.getLikes());
+                data.putExtra("savednews","false");
                 data.putExtra("title","The Millennial");
                 Integer views  = dataleft.getViews()+1;
                 data.putExtra("views", views);
@@ -138,6 +213,7 @@ public class newsadapter extends RecyclerView.Adapter<newsadapter.MyViewHolder> 
                 data.putExtra("image",dataleft.getImage());
                 data.putExtra("textualdata",dataleft.getTextualdata());
                 data.putExtra("likes",dataleft.getLikes());
+                data.putExtra("savednews","false");
                 data.putExtra("title","The Millennial");
                 Integer views  = dataleft.getViews()+1;
                 data.putExtra("views", views);
