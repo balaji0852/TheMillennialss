@@ -17,6 +17,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirestoreRegistrar;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -61,7 +62,7 @@ public class newsadapter extends RecyclerView.Adapter<newsadapter.MyViewHolder> 
         myViewHolder.text.setText(dataleft.getHeadline());
         Picasso.get().load(dataleft.getImage()).placeholder(R.mipmap.ic_launcher).fit().centerCrop().into(myViewHolder.image);
         myViewHolder.views.setText(dataleft.getViews()+" Views");
-        myViewHolder.nlikes.setText(dataleft.getLikes()+ " Likes");
+        myViewHolder.nlikes.setText(dataleft.getPlikes()+ "%Liked");
 
         myViewHolder.like.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -70,94 +71,31 @@ public class newsadapter extends RecyclerView.Adapter<newsadapter.MyViewHolder> 
                 final CollectionReference newsdata =  db.collection(dataleft.getDate()).
                         document(dataleft.getCategory()).collection("news");
                 final CollectionReference likeddata =db.collection("8151033423");
-
-//                likeddata.whereEqualTo("headline",dataleft.getHeadline())
-//                        .get().
-//                        addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-//                            @Override
-//                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-//                                if(task.isSuccessful()) {
-//                                    for (QueryDocumentSnapshot document : task.getResult()) {
-//                                        if ((Boolean) document.get("liked").equals(true)) {
-//                                            Map<String, Object> likesytem = new HashMap<>();
-//                                            likesytem.put("liked", false);
-//                                            likeddata.document(document.getId()).set(likesytem, SetOptions.merge());
-//
-//                                            newsdata.whereEqualTo("headline",dataleft.getHeadline()).get().
-//                                                    addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-//                                                        @Override
-//                                                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
-//                                                            if(task.isSuccessful()){
-//                                                                for (QueryDocumentSnapshot document : task.getResult()) {
-//                                                                    Map<String, Object> liked = new HashMap<>();
-//                                                                    liked.put("likes", dataleft.getLikes()-1);
-//                                                                    newsdata.document(document.getId()).set(liked,SetOptions.merge());
-//                                                                    Toast.makeText(context, "Disliked", Toast.LENGTH_SHORT).show();
-//
-//                                                                }
-//                                                            }
-//                                                        }
-//                                                    });
-//                                        } else {
-//                                            Map<String, Object> likesytem = new HashMap<>();
-//                                            likesytem.put("liked", true);
-//                                            likeddata.document(document.getId()).set(likesytem, SetOptions.merge());
-//                                            Toast.makeText(context, "liked", Toast.LENGTH_SHORT).show();
-//                                            newsdata.whereEqualTo("headline",dataleft.getHeadline()).get().
-//                                                    addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-//                                                        @Override
-//                                                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
-//                                                            if(task.isSuccessful()){
-//                                                                for (QueryDocumentSnapshot document : task.getResult()) {
-//                                                                    Map<String, Object> liked = new HashMap<>();
-//                                                                    liked.put("likes", dataleft.getLikes()+1);
-//                                                                    newsdata.document(document.getId()).set(liked,SetOptions.merge());
-//                                                                }
-//                                                            }
-//                                                        }
-//                                                    });
-//                                        }
-//                                    }
-//                                }
-//                                 }}).addOnFailureListener(new OnFailureListener() {
-//                                    @Override
-//                                    public void onFailure(@NonNull Exception e) {
-//                                        Map<String, Object> likesytem = new HashMap<>();
-//                                        likesytem.put("headline", dataleft.getHeadline());
-//                                        likesytem.put("liked","true");
-//                                        likeddata.document().set(likesytem);
-//
-//                                    newsdata.whereEqualTo("headline",dataleft.getHeadline()).get().
-//                                            addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-//                                                @Override
-//                                                public void onComplete(@NonNull Task<QuerySnapshot> task) {
-//                                                    if(task.isSuccessful()){
-//                                                        for (QueryDocumentSnapshot document : task.getResult()) {
-//                                                            Map<String, Object> liked = new HashMap<>();
-//                                                            liked.put("likes", dataleft.getLikes()+1);
-//                                                            newsdata.document(document.getId()).set(liked,SetOptions.merge());
-//                                                            Toast.makeText(context, "liked", Toast.LENGTH_SHORT).show();
-//                                                        }
-//                                                    }
-//                                                }
-//                                            });
-//                                    }
-//                                });
-
-                newsdata.whereEqualTo("headline",dataleft.getHeadline()).get().
-                        addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                db.collection("nusers").document("ucount").get().
+                        addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                             @Override
-                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                if(task.isSuccessful()){
-                                    for (QueryDocumentSnapshot document : task.getResult()) {
-                                        Map<String, Object> liked = new HashMap<>();
-                                        liked.put("likes", dataleft.getLikes()+1);
-                                        newsdata.document(document.getId()).set(liked,SetOptions.merge());
-//                                        Toast.makeText(context, "liked", Toast.LENGTH_SHORT).show();
+                            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                final Number nusers = (Number) documentSnapshot.get("users");
+                                newsdata.whereEqualTo("headline", dataleft.getHeadline()).get().
+                                        addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                                if (task.isSuccessful()) {
+                                                    for (QueryDocumentSnapshot document : task.getResult()) {
+                                                        Number templike = (Number) document.get("likes");
+                                                        Integer likecount = templike.intValue();
+                                                        Map<String, Object> liked = new HashMap<>();
+                                                        likecount++;
+                                                        Float temp = (Float.intBitsToFloat(likecount) / Float.intBitsToFloat(nusers.intValue()) * 100);
+                                                        liked.put("likes",likecount);
+                                                        liked.put("plikes",Math.round(temp));
+                                                        newsdata.document(document.getId()).set(liked,SetOptions.merge());
+                                                    }
+                                                }
+                                            }
+                                        });
                                     }
-                                }
-                            }
-                        });
+                                });
             }
         });
 

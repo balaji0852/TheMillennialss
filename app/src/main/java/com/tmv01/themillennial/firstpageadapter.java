@@ -16,6 +16,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -58,31 +59,44 @@ public class firstpageadapter extends RecyclerView.Adapter<firstpageadapter.MyVi
         final firstpagedata dataleft=firstpageleftdata.get(i);
         myViewHolder.text.setText(dataleft.getHeadline());
         myViewHolder.views.setText(  dataleft.getViews()+" views");
-        myViewHolder.likes.setText(dataleft.getLikes()+ " Likes");
+        myViewHolder.likes.setText(dataleft.getPlikes()+"%Likec");
         Picasso.get().load(dataleft.getImage()).placeholder(R.mipmap.ic_launcher).fit().centerCrop().into(myViewHolder.image);
 
             myViewHolder.liked.setOnClickListener(new View.OnClickListener() {
-
                 @Override
                 public void onClick(View view) {
-                    final CollectionReference db =  FirebaseFirestore.getInstance().collection(dataleft.getDate()).
-                            document("First page").collection("news");
-
-                        db.whereEqualTo("headline",dataleft.getHeadline()).get().
-                                addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                        if(task.isSuccessful()){
-                                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                                Map<String, Object> liked = new HashMap<>();
-                                                liked.put("likes", dataleft.getLikes()+1);
-                                                db.document(document.getId()).set(liked,SetOptions.merge());
-                                            }
-                                        }
-                                    }
-                                });
+                    FirebaseFirestore db = FirebaseFirestore.getInstance();
+                    final CollectionReference newsdata =  db.collection(dataleft.getDate()).
+                            document(dataleft.getCategory()).collection("news");
+                    final CollectionReference likeddata =db.collection("8151033423");
+                    db.collection("nusers").document("ucount").get().
+                            addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                @Override
+                                public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                    final Number nusers = (Number) documentSnapshot.get("users");
+                                    newsdata.whereEqualTo("headline", dataleft.getHeadline()).get().
+                                            addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                                    if (task.isSuccessful()) {
+                                                        for (QueryDocumentSnapshot document : task.getResult()) {
+                                                            Number templike = (Number) document.get("likes");
+                                                            Integer likecount = templike.intValue();
+                                                            Map<String, Object> liked = new HashMap<>();
+                                                            likecount++;
+                                                            Float temp = (Float.intBitsToFloat(likecount) / Float.intBitsToFloat(nusers.intValue()) * 100);
+                                                            liked.put("likes",likecount);
+                                                            liked.put("plikes",Math.round(temp));
+                                                            newsdata.document(document.getId()).set(liked,SetOptions.merge());
+                                                        }
+                                                    }
+                                                }
+                                            });
+                                }
+                            });
                 }
             });
+
 
             myViewHolder.save.setOnClickListener(new View.OnClickListener() {
                 @Override

@@ -1,40 +1,35 @@
 package com.tmv01.themillennial;
 
-import android.annotation.SuppressLint;
-import android.media.Image;
+
 import android.os.Bundle;
-import android.view.TextureView;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.loader.content.Loader;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.SetOptions;
 import com.squareup.picasso.Picasso;
-
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
 public class news extends AppCompatActivity {
-     Number templike;
+     Number templike,nusers;
      Integer likecount;
      FirebaseFirestore db =  FirebaseFirestore.getInstance();
+
 
 
     @Override
@@ -64,51 +59,55 @@ public class news extends AppCompatActivity {
 
 
 
-              db.collection(getIntent().getStringExtra("date")).
-                document(getIntent().getStringExtra("category")).
+              db.collection(Objects.requireNonNull(getIntent().getStringExtra("date"))).
+                document(Objects.requireNonNull(getIntent().getStringExtra("category"))).
                 collection("news").whereEqualTo("headline",getIntent().getStringExtra("headline")).get().
                     addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                         @Override
                         public void onComplete(@NonNull Task<QuerySnapshot> task) {
                             if(task.isSuccessful()){
-                                for (QueryDocumentSnapshot document : task.getResult()) {
-                                    if(getIntent().getStringExtra("savednews").equals("true")){
+                                for (QueryDocumentSnapshot document : Objects.requireNonNull(task.getResult())) {
+                                    if(Objects.equals(getIntent().getStringExtra("savednews"), "true")){
                                         Textualdata.setText(String.valueOf(document.getString("textualdata")));
                                         Number tempview=(Number)document.get("views");
-                                        templike=(Number)document.get("likes");
-                                        likes.setText(String.format("%s likes", templike.intValue()));
+                                        templike=(Number)document.get("plikes");
+                                        assert templike != null;
+                                        likes.setText(String.format("%s liked",templike.intValue()));
                                         Integer value  = tempview.intValue() +1;
                                         views.setText(String.format("%s views", value));
                                         Map<String, Object> viewed = new HashMap<>();
                                         viewed.put("views",value );
-                                        db.collection(getIntent().getStringExtra("date")).
-                                                document(getIntent().getStringExtra("category")).
+                                        db.collection(Objects.requireNonNull(getIntent().getStringExtra("date"))).
+                                                document(Objects.requireNonNull(getIntent().getStringExtra("category"))).
                                                 collection("news") .document(document.getId()).set(viewed, SetOptions.merge());
                                     }
                                     else {
-                                        db.collection(getIntent().getStringExtra("date")).
-                                                document(getIntent().getStringExtra("category")).
+                                        db.collection(Objects.requireNonNull(getIntent().getStringExtra("date"))).
+                                                document(Objects.requireNonNull(getIntent().getStringExtra("category"))).
                                                 collection("news").whereEqualTo("headline",getIntent().getStringExtra("headline")).get().
                                                 addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                                                     @Override
                                                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                                                         if(task.isSuccessful()){
-                                                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                                            for (QueryDocumentSnapshot document : Objects.requireNonNull(task.getResult())) {
                                                                 Number view=(Number)document.get("views");
+                                                                Number plikes=(Number)document.get("plikes");
+                                                                assert view != null;
                                                                 Integer value  = view.intValue() +1;
                                                                 Map<String, Object> viewed = new HashMap<>();
                                                                 viewed.put("views",value );
-                                                                db.collection(getIntent().getStringExtra("date")).
-                                                                        document(getIntent().getStringExtra("category")).
+                                                                db.collection(Objects.requireNonNull(getIntent().getStringExtra("date"))).
+                                                                        document(Objects.requireNonNull(getIntent().getStringExtra("category"))).
                                                                         collection("news")
                                                                         .document(document.getId()).set(viewed, SetOptions.merge());
+                                                                Textualdata.setText(getIntent().getStringExtra("textualdata"));
+                                                                likes.setText(plikes+"% liked");
+                                                                views.setText(getIntent().getIntExtra("views",0)+ "views");
                                                             }
                                                         }
                                                     }
                                                 });
-                                        Textualdata.setText(getIntent().getStringExtra("textualdata"));
-                                        likes.setText(getIntent().getIntExtra("likes",0)+"likes");
-                                        views.setText(getIntent().getIntExtra("views",0)+ "views");
+
                                     }
 
                                 }
@@ -119,92 +118,65 @@ public class news extends AppCompatActivity {
 
            like.setOnClickListener(new View.OnClickListener() {
                Integer count=1;
+
                 @Override
                 public void onClick(View view) {
-                    if(count==1){
-                        db.collection(getIntent().getStringExtra("date")).
-                                document(getIntent().getStringExtra("category")).
-                                collection("news").whereEqualTo("headline", getIntent().getStringExtra("headline")).get().
-                                addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                        if (task.isSuccessful()) {
-                                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                                if (getIntent().getStringExtra("savednews").equals("true")) {
-                                                    likecount = Integer.valueOf(templike.intValue());
-                                                } else {
-                                                    likecount = Integer.valueOf(getIntent().getIntExtra("likes", 0));
+
+                    db.collection("nusers").document("ucount").get().
+                            addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                @Override
+                                public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                    nusers = (Number) documentSnapshot.get("users");
+                                    db.collection(getIntent().getStringExtra("date")).
+                                            document(getIntent().getStringExtra("category")).
+                                            collection("news").whereEqualTo("headline", getIntent().getStringExtra("headline")).get().
+                                            addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                                    if (task.isSuccessful()) {
+                                                        for (QueryDocumentSnapshot document : task.getResult()) {
+                                                            templike = (Number) document.get("likes");
+                                                            likecount = templike.intValue();
+                                                            if (count == 1) {
+                                                                Map<String, Object> liked = new HashMap<>();
+                                                                likecount++;
+                                                                Float temp = (Float.intBitsToFloat(likecount) / Float.intBitsToFloat(nusers.intValue()) * 100);
+                                                                liked.put("likes",likecount);
+                                                                liked.put("plikes",Math.round(temp));
+                                                                likes.setText(Math.round(temp)+ "%" + "liked");
+                                                                FirebaseFirestore.getInstance().collection(getIntent().getStringExtra("date")).
+                                                                        document(getIntent().getStringExtra("category")).
+                                                                        collection("news").document(document.getId()).set(liked, SetOptions.merge());
+                                                                count++;
+                                                            } else if (count % 2 == 0) {
+                                                                likecount--;
+                                                                Map<String, Object> liked = new HashMap<>();
+                                                                Float temp = (Float.intBitsToFloat(likecount) / Float.intBitsToFloat(nusers.intValue()) * 100);
+                                                                liked.put("likes",likecount);
+                                                                liked.put("plikes",Math.round(temp));
+                                                                likes.setText(Math.round(temp)+ "%" + "liked");
+                                                                FirebaseFirestore.getInstance().collection(getIntent().getStringExtra("date")).
+                                                                        document(getIntent().getStringExtra("category")).
+                                                                        collection("news").document(document.getId()).set(liked, SetOptions.merge());
+                                                                count++;
+                                                            } else {
+                                                                likecount++;
+                                                                Map<String, Object> liked = new HashMap<>();
+                                                                Float temp = (Float.intBitsToFloat(likecount) / Float.intBitsToFloat(nusers.intValue()) * 100);
+                                                                liked.put("likes",likecount);
+                                                                liked.put("plikes",Math.round(temp));
+                                                                likes.setText(Math.round(temp)+ "%" + "liked");
+                                                                FirebaseFirestore.getInstance().collection(getIntent().getStringExtra("date")).
+                                                                        document(getIntent().getStringExtra("category")).
+                                                                        collection("news").document(document.getId()).set(liked, SetOptions.merge());
+                                                                count++;
+                                                            }
+                                                        }
+                                                    }
                                                 }
-
-                                                Map<String, Object> liked = new HashMap<>();
-                                                likecount++;
-                                                likes.setText(likecount + "likes");
-                                                liked.put("likes", likecount);
-                                                FirebaseFirestore.getInstance().collection(getIntent().getStringExtra("date")).
-                                                        document(getIntent().getStringExtra("category")).
-                                                        collection("news").document(document.getId()).set(liked, SetOptions.merge());
-                                                Toast.makeText(news.this, "Liked", Toast.LENGTH_SHORT).show();
-                                                count++;
-                                            }
-                                        }
-                                    }
-                                });
-                    }
-                    else if (count%2==0 ) {
-                        db.collection(getIntent().getStringExtra("date")).
-                                document(getIntent().getStringExtra("category")).
-                                collection("news").whereEqualTo("headline", getIntent().getStringExtra("headline")).get().
-                                addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                        if (task.isSuccessful()) {
-                                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                                Number dislike=(Number)document.get("likes");
-                                                Integer tempdislike  = dislike.intValue()-1;
-                                                Map<String, Object> viewed = new HashMap<>();
-                                                viewed.put("views",tempdislike );
-                                                Map<String, Object> liked = new HashMap<>();
-                                                likes.setText(tempdislike+"likes");
-                                                liked.put("likes", tempdislike);
-                                                FirebaseFirestore.getInstance().collection(getIntent().getStringExtra("date")).
-                                                        document(getIntent().getStringExtra("category")).
-                                                        collection("news").document(document.getId()).set(liked, SetOptions.merge());
-                                                Toast.makeText(news.this, "disliked", Toast.LENGTH_SHORT).show();
-                                                count++;
-
-                                            }
-                                        }
-                                    }
-                                });
-                    }
-                    else{
-                        db.collection(getIntent().getStringExtra("date")).
-                                document(getIntent().getStringExtra("category")).
-                                collection("news").whereEqualTo("headline", getIntent().getStringExtra("headline")).get().
-                                addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                        if (task.isSuccessful()) {
-                                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                                Number dislike=(Number)document.get("likes");
-                                                Integer templike  = dislike.intValue()+1;
-                                                Map<String, Object> viewed = new HashMap<>();
-                                                viewed.put("views",templike );
-                                                Map<String, Object> liked = new HashMap<>();
-                                                likes.setText(templike+"likes");
-                                                liked.put("likes", templike);
-                                                FirebaseFirestore.getInstance().collection(getIntent().getStringExtra("date")).
-                                                        document(getIntent().getStringExtra("category")).
-                                                        collection("news").document(document.getId()).set(liked, SetOptions.merge());
-                                                Toast.makeText(news.this, "Liked", Toast.LENGTH_SHORT).show();
-                                                count++;
-                                            }
-                                        }
-                                    }
-                                });
-
-                    }
-
+                                            });
+                                }
+                            });
                 }
             });
 
