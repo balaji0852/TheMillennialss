@@ -5,8 +5,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
-import android.util.Pair;
+import android.os.Environment;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -20,16 +23,19 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
 
 import javax.annotation.Nullable;
 
 import static java.lang.String.valueOf;
 
-public class tib extends AppCompatActivity {
+public class tib<url> extends AppCompatActivity {
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     ArrayList<firstpagedata> maindata= new ArrayList<>();
     public RecyclerView news;
@@ -39,6 +45,7 @@ public class tib extends AppCompatActivity {
     private String Sports,Politics,Technology,Autonews,Tib,Entertainment,Fashion,Education;
     String uno = "8151033423";
     ArrayList<String> data = new ArrayList<>();
+    public  String url;
 
 
     @Override
@@ -165,6 +172,13 @@ public class tib extends AppCompatActivity {
 
 
     }
+
+
+    public File exmp(){
+        return getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+    }
+
+
 
 
 }

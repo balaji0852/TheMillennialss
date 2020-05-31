@@ -68,7 +68,7 @@
                 android:layout_marginEnd="5dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.744"
+                app:layout_constraintHorizontal_bias="0.629"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.117"
@@ -84,7 +84,7 @@
                 android:layout_alignParentBottom="true"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.894"
+                app:layout_constraintHorizontal_bias="0.922"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.117"
@@ -92,8 +92,8 @@
 
             <TextView
                 android:id="@+id/viewcount"
-                android:layout_width="240dp"
-                android:layout_height="30dp"
+                android:layout_width="188dp"
+                android:layout_height="26dp"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentEnd="true"
@@ -104,15 +104,15 @@
                 android:textSize="15sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.094"
+                app:layout_constraintHorizontal_bias="0.13"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.083" />
+                app:layout_constraintVertical_bias="0.068" />
 
             <TextView
                 android:id="@+id/nlikes"
-                android:layout_width="239dp"
-                android:layout_height="29dp"
+                android:layout_width="184dp"
+                android:layout_height="26dp"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentEnd="true"
@@ -122,10 +122,22 @@
                 android:textSize="15sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.093"
+                app:layout_constraintHorizontal_bias="0.127"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.719" />
+                app:layout_constraintVertical_bias="0.724" />
+
+            <ImageButton
+                android:id="@+id/share"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.77"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.117"
+                app:srcCompat="?attr/actionModeShareDrawable" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <TextView

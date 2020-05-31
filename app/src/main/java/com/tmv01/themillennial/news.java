@@ -1,7 +1,13 @@
 package com.tmv01.themillennial;
 
 
+import android.content.Context;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -22,6 +28,12 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.SetOptions;
 import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -30,7 +42,9 @@ public class news extends AppCompatActivity {
      Number templike,nusers,Count;
      Integer likecount;
      FirebaseFirestore db =  FirebaseFirestore.getInstance();
-
+    Bitmap bmp ;
+    Context context;
+    private Object Context;
 
 
     @Override
@@ -62,6 +76,7 @@ public class news extends AppCompatActivity {
         ImageButton save = findViewById(R.id.saved);
         final ImageButton like = findViewById(R.id.like);
         ImageView Imagedata = findViewById(R.id.imagedata);
+        ImageButton share = findViewById(R.id.share);
 
         Headline.setText(getIntent().getStringExtra("headline"));
         category.setText(getIntent().getStringExtra("title"));
@@ -125,6 +140,12 @@ public class news extends AppCompatActivity {
 
 
 
+           share.setOnClickListener(new View.OnClickListener() {
+               @Override
+               public void onClick(View view) {
+                   shareItem(getIntent().getStringExtra("image"));
+               }
+           });
 
            like.setOnClickListener(new View.OnClickListener() {
                Integer count=1;
@@ -209,6 +230,7 @@ public class news extends AppCompatActivity {
                 }
             });
 
+
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -244,4 +266,36 @@ public class news extends AppCompatActivity {
                             }});
             }});
     }
+    public Uri getLocalBitmapUri(Bitmap bmp) {
+        Uri bmpUri = null;
+        try {
+            File file =  new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), "Themillennial" + System.currentTimeMillis() + ".png");
+            FileOutputStream out = new FileOutputStream(file);
+            bmp.compress(Bitmap.CompressFormat.PNG, 90, out);
+            out.close();
+            bmpUri = Uri.fromFile(file);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return bmpUri;
+    }
+    public void shareItem( String url) {
+        Picasso.get().load(url).into(new Target() {
+            @Override public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                Intent i = new Intent(Intent.ACTION_SEND);
+                i.setType("image/*");
+                i.putExtra(Intent.EXTRA_TEXT, "The Millennial(Beta)News app : News Headline"+getIntent().getStringExtra("headline"));
+                i.putExtra(Intent.EXTRA_STREAM, getLocalBitmapUri(bitmap));
+                startActivity(Intent.createChooser(i, "Share news"));
+            }
+
+            @Override
+            public void onBitmapFailed(Exception e, Drawable errorDrawable) {
+
+            }
+
+            @Override public void onPrepareLoad(Drawable placeHolderDrawable) { }
+        });
+    }
+
 }

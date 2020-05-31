@@ -2,6 +2,10 @@ package com.tmv01.themillennial;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
+import android.os.Environment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,9 +28,14 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.SetOptions;
 import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -66,8 +75,11 @@ public class newsadapter extends RecyclerView.Adapter<newsadapter.MyViewHolder> 
         final FirebaseFirestore db = FirebaseFirestore.getInstance();
 
         myViewHolder.like.setOnClickListener(new View.OnClickListener() {
+            final int[] count = {0};
             @Override
             public void onClick(View view) {
+                count[0]++;
+                Toast.makeText(context, String.valueOf(count[0]), Toast.LENGTH_SHORT).show();
                 final CollectionReference newsdata =  db.collection(dataleft.getDate()).
                         document(dataleft.getCategory()).collection("news");
                 final CollectionReference likeddata =db.collection("8151033423");
@@ -159,6 +171,25 @@ public class newsadapter extends RecyclerView.Adapter<newsadapter.MyViewHolder> 
                 v.getContext().startActivity(data);
             }
         });
+        myViewHolder.share.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View view) {
+                Picasso.get().load(dataleft.getImage()).into(new Target() {
+                        @Override public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+
+                            Intent i = new Intent(Intent.ACTION_SEND);
+                            i.setType("image/*");
+                            i.putExtra(Intent.EXTRA_TEXT, "The Millennial(Beta)News app : News Headline :"+dataleft.getHeadline());
+                            i.putExtra(Intent.EXTRA_STREAM, getLocalBitmapUri(bitmap));
+                            view.getContext().startActivity(Intent.createChooser(i, "Share news"));
+                        }
+                        @Override
+                        public void onBitmapFailed(Exception e, Drawable errorDrawable) {
+                        }
+                        @Override public void onPrepareLoad(Drawable placeHolderDrawable) { }
+                    });
+            }
+        });
         myViewHolder.text.setOnClickListener(new View.OnClickListener() {
             Intent data;
             @Override
@@ -179,8 +210,9 @@ public class newsadapter extends RecyclerView.Adapter<newsadapter.MyViewHolder> 
             }
         });
 
-
     }
+
+
 
     @Override
     public int getItemCount()
@@ -191,7 +223,7 @@ public class newsadapter extends RecyclerView.Adapter<newsadapter.MyViewHolder> 
     public class MyViewHolder extends RecyclerView.ViewHolder
     {
         TextView text,nlikes,views;
-        ImageButton like,save;
+        ImageButton like,save,share;
         ImageView image;
         RelativeLayout block;
 
@@ -199,6 +231,7 @@ public class newsadapter extends RecyclerView.Adapter<newsadapter.MyViewHolder> 
         public MyViewHolder(@NonNull final View itemView)
         {
             super(itemView);
+            share=itemView.findViewById(R.id.share);
             nlikes = itemView.findViewById(R.id.nlikes);
             save = itemView.findViewById(R.id.saved);
             views =itemView.findViewById(R.id.viewcount);
@@ -210,6 +243,23 @@ public class newsadapter extends RecyclerView.Adapter<newsadapter.MyViewHolder> 
 
         }
     }
+
+    public Uri getLocalBitmapUri(Bitmap bmp) {
+        Uri bmpUri = null;
+        try {
+            File file =  new File(context.getExternalFilesDir(Environment.DIRECTORY_PICTURES), "Themillennial" + System.currentTimeMillis() + ".png");
+            FileOutputStream out = new FileOutputStream(file);
+            bmp.compress(Bitmap.CompressFormat.PNG, 90, out);
+            out.close();
+            bmpUri = Uri.fromFile(file);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return bmpUri;
+    }
+
+
+
 
 
 }
