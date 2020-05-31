@@ -54,7 +54,7 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="60dp">
+            android:layout_height="84dp">
 
 
             <ImageButton
@@ -65,13 +65,13 @@
                 android:layout_alignParentTop="true"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentBottom="true"
-                android:layout_marginStart="13dp"
-                android:layout_marginEnd="20dp"
+                android:layout_marginEnd="5dp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/nlikes"
-                app:layout_constraintHorizontal_bias="0.098"
-                app:layout_constraintStart_toEndOf="@+id/viewcount"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.744"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.117"
                 app:srcCompat="@drawable/ic_grade_black_24dp" />
 
             <ImageButton
@@ -82,48 +82,50 @@
                 android:layout_alignParentTop="true"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentBottom="true"
-                android:layout_marginEnd="24dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.894"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.117"
                 app:srcCompat="@drawable/ic_favorite_black_24dp" />
 
             <TextView
                 android:id="@+id/viewcount"
-                android:layout_width="103dp"
-                android:layout_height="28dp"
+                android:layout_width="240dp"
+                android:layout_height="30dp"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentBottom="true"
-                android:layout_marginStart="5dp"
                 android:fontFamily="@font/bangers"
                 android:text="0 views"
                 android:textColor="@color/red"
                 android:textSize="15sp"
                 app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.094"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.406" />
+                app:layout_constraintVertical_bias="0.083" />
 
             <TextView
                 android:id="@+id/nlikes"
-                android:layout_width="72dp"
-                android:layout_height="23dp"
+                android:layout_width="239dp"
+                android:layout_height="29dp"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentBottom="true"
-                android:layout_marginEnd="12dp"
                 android:fontFamily="@font/bangers"
                 android:text="0 likes"
                 android:textSize="15sp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/like"
-                app:layout_constraintHorizontal_bias="0.995"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.093"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.432" />
+                app:layout_constraintVertical_bias="0.719" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <TextView

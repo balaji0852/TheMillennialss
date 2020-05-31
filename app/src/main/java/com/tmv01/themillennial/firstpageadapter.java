@@ -59,13 +59,13 @@ public class firstpageadapter extends RecyclerView.Adapter<firstpageadapter.MyVi
         final firstpagedata dataleft=firstpageleftdata.get(i);
         myViewHolder.text.setText(dataleft.getHeadline());
         myViewHolder.views.setText(  dataleft.getViews()+" views");
-        myViewHolder.likes.setText(dataleft.getPlikes()+"%Likec");
+        myViewHolder.likes.setText(dataleft.getPlikes()+"%Liked");
         Picasso.get().load(dataleft.getImage()).placeholder(R.mipmap.ic_launcher).fit().centerCrop().into(myViewHolder.image);
+            final FirebaseFirestore db = FirebaseFirestore.getInstance();
 
             myViewHolder.liked.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    FirebaseFirestore db = FirebaseFirestore.getInstance();
                     final CollectionReference newsdata =  db.collection(dataleft.getDate()).
                             document(dataleft.getCategory()).collection("news");
                     final CollectionReference likeddata =db.collection("8151033423");
@@ -88,6 +88,16 @@ public class firstpageadapter extends RecyclerView.Adapter<firstpageadapter.MyVi
                                                             liked.put("likes",likecount);
                                                             liked.put("plikes",Math.round(temp));
                                                             newsdata.document(document.getId()).set(liked,SetOptions.merge());
+                                                            db.collection("8151033423").document("views").get().
+                                                                    addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                                                        @Override
+                                                                        public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                                                            String Category =dataleft.getCategory();
+                                                                            Number value = (Number) documentSnapshot.get(Category);
+                                                                            Map<String, Object> viewsdata = new HashMap<>();
+                                                                            viewsdata.put(Category, value.intValue()+1);
+                                                                            db.collection("8151033423").document("views").set(viewsdata, SetOptions.merge());
+                                                                        }});
                                                         }
                                                     }
                                                 }
@@ -96,7 +106,6 @@ public class firstpageadapter extends RecyclerView.Adapter<firstpageadapter.MyVi
                             });
                 }
             });
-
 
             myViewHolder.save.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -114,6 +123,16 @@ public class firstpageadapter extends RecyclerView.Adapter<firstpageadapter.MyVi
                                         FirebaseFirestore.getInstance().collection("8151033423").document("saved")
                                                 .collection("news").document().set(saved);
                                         Toast.makeText(context, "News saved successfully.", Toast.LENGTH_SHORT).show();
+                                        db.collection("8151033423").document("views").get().
+                                                addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                                    @Override
+                                                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                                        String Category =dataleft.getCategory();
+                                                        Number value = (Number) documentSnapshot.get(Category);
+                                                        Map<String, Object> viewsdata = new HashMap<>();
+                                                        viewsdata.put(Category, value.intValue()+1);
+                                                        db.collection("8151033423").document("views").set(viewsdata, SetOptions.merge());
+                                                    }});
                                     } else {
                                         Toast.makeText(context, "News already exist in your archive.", Toast.LENGTH_SHORT).show();
                                     }
