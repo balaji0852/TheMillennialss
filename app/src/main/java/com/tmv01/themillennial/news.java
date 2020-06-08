@@ -23,6 +23,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -147,109 +148,141 @@ public class news extends AppCompatActivity {
                }
            });
 
-           like.setOnClickListener(new View.OnClickListener() {
-               Integer count=1;
+        like.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final CollectionReference newsdata =  db.collection(getIntent().getStringExtra("date")).
+                        document(getIntent().getStringExtra("category")).collection("news");
+                final CollectionReference database = db.collection("8151033423").
+                        document("saved").collection("news");
+                db.collection("nusers").document("ucount").get().
+                        addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                            @Override
+                            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                final Number nusers = (Number) documentSnapshot.get("users");
+                                newsdata.whereEqualTo("headline", getIntent().getStringExtra("headline")).get().
+                                        addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                                if (task.isSuccessful()) {
+                                                    for (final QueryDocumentSnapshot document : task.getResult()) {
+                                                        Number templike = (Number) document.get("likes");
+                                                        final Integer[] likecount = {templike.intValue()};
+                                                        Map<String, Object> liked = new HashMap<>();
+                                                        database.whereEqualTo("headline", getIntent().getStringExtra("headline")).get().
+                                                                addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                                                    Map<String, Object> liked = new HashMap<>();
 
-                @Override
-                public void onClick(View view) {
+                                                                    @Override
+                                                                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                                                        if (task.getResult().size() == 0) {
+                                                                            liked.put("saved", "false");
+                                                                            liked.put("headline", getIntent().getStringExtra("headline"));
+                                                                            liked.put("liked", "true");
+                                                                            likecount[0]++;
+                                                                            Float temp = (Float.intBitsToFloat(likecount[0]) / Float.intBitsToFloat(nusers.intValue()) * 100);
+                                                                            liked.put("likes", likecount[0]);
+                                                                            liked.put("plikes",Math.round(temp));
+                                                                            newsdata.document(document.getId()).set(liked,SetOptions.merge());
+                                                                            FirebaseFirestore.getInstance().collection("8151033423").document("saved")
+                                                                                    .collection("news").document().set(liked);
+                                                                            Toast.makeText(news.this, "liked", Toast.LENGTH_SHORT).show();
+                                                                            db.collection("8151033423").document("views").get().
+                                                                                    addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                                                                        @Override
+                                                                                        public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                                                                            String Category =getIntent().getStringExtra("category");
+                                                                                            Number value = (Number) documentSnapshot.get(Category);
+                                                                                            Map<String, Object> viewsdata = new HashMap<>();
+                                                                                            viewsdata.put(Category, value.intValue()+1);
+                                                                                            db.collection("8151033423").document("views").set(viewsdata, SetOptions.merge());
+                                                                                        }});
+                                                                        } else {
+                                                                            for (QueryDocumentSnapshot docs : task.getResult()) {
+                                                                                if (docs.get("liked").equals("true")) {
+                                                                                    likecount[0]--;
+                                                                                    Float temp = (Float.intBitsToFloat(likecount[0]) / Float.intBitsToFloat(nusers.intValue()) * 100);
+                                                                                    liked.put("likes", likecount[0]);
+                                                                                    liked.put("plikes",Math.round(temp));
+                                                                                    newsdata.document(document.getId()).set(liked,SetOptions.merge());
 
-                    db.collection("nusers").document("ucount").get().
-                            addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                                @Override
-                                public void onSuccess(DocumentSnapshot documentSnapshot) {
-                                    nusers = (Number) documentSnapshot.get("users");
-                                    db.collection(getIntent().getStringExtra("date")).
-                                            document(getIntent().getStringExtra("category")).
-                                            collection("news").whereEqualTo("headline", getIntent().getStringExtra("headline")).get().
-                                            addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                                                @Override
-                                                public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                                    if (task.isSuccessful()) {
-                                                        for (final QueryDocumentSnapshot document : task.getResult()) {
-                                                            templike = (Number) document.get("likes");
-                                                            likecount = templike.intValue();
-                                                            db.collection("8151033423").document("views").get().
-                                                                    addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                                                                        @Override
-                                                                        public void onSuccess(DocumentSnapshot documentSnapshot) {
-                                                                            String Category =getIntent().getStringExtra("category");
-                                                                            Count = (Number) documentSnapshot.get(Category);
-                                                                            Map<String, Object> viewsdata = new HashMap<>();
+                                                                                    if (docs.get("saved").equals("true")) {
+                                                                                        liked.put("liked", "false");
+                                                                                        liked.put("saved", "false");
+                                                                                        liked.put("headline", getIntent().getStringExtra("headline"));
+                                                                                        liked.put("liked", "true");
+                                                                                        db.collection("8151033423").document("saved")
+                                                                                                .collection("news").document(docs.getId()).update(liked);
+                                                                                        Toast.makeText(news.this, "disliked.", Toast.LENGTH_SHORT).show();
+                                                                                    } else {
+                                                                                        db.collection("8151033423").document("saved")
+                                                                                                .collection("news").document(docs.getId()).delete();
+                                                                                        Toast.makeText(news.this, "disliked.", Toast.LENGTH_SHORT).show();
+                                                                                    }
 
+                                                                                } else {
+                                                                                    likecount[0]++;
+                                                                                    Float temp = (Float.intBitsToFloat(likecount[0]) / Float.intBitsToFloat(nusers.intValue()) * 100);
+                                                                                    liked.put("likes", likecount[0]);
+                                                                                    liked.put("plikes",Math.round(temp));
+                                                                                    newsdata.document(document.getId()).set(liked,SetOptions.merge());
+                                                                                    if (docs.get("saved").equals("false")) {
+                                                                                        liked.put("liked", "true");
+                                                                                        FirebaseFirestore.getInstance().collection("8151033423").document("saved")
+                                                                                                .collection("news").document(docs.getId()).update(liked);
+                                                                                        Toast.makeText(news.this, "liked", Toast.LENGTH_SHORT).show();
+                                                                                    } else {
+                                                                                        liked.put("liked", "true");
+                                                                                        FirebaseFirestore.getInstance().collection("8151033423").document("saved")
+                                                                                                .collection("news").document(docs.getId()).update(liked);
+                                                                                        Toast.makeText(news.this, "liked.", Toast.LENGTH_SHORT).show();
+                                                                                    }
+                                                                                    db.collection("8151033423").document("views").get().
+                                                                                            addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                                                                                @Override
+                                                                                                public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                                                                                    String Category =getIntent().getStringExtra("category");
+                                                                                                    Number value = (Number) documentSnapshot.get(Category);
+                                                                                                    Map<String, Object> viewsdata = new HashMap<>();
+                                                                                                    viewsdata.put(Category, value.intValue()+1);
+                                                                                                    db.collection("8151033423").document("views").set(viewsdata, SetOptions.merge());
+                                                                                                }});
 
-                                                            if (count == 1) {
-                                                                Map<String, Object> liked = new HashMap<>();
-                                                                likecount++;
-                                                                Float temp = (Float.intBitsToFloat(likecount) / Float.intBitsToFloat(nusers.intValue()) * 100);
-                                                                liked.put("likes",likecount);
-                                                                liked.put("plikes",Math.round(temp));
-                                                                likes.setText(Math.round(temp)+ "%" + "liked");
-                                                                FirebaseFirestore.getInstance().collection(getIntent().getStringExtra("date")).
-                                                                        document(getIntent().getStringExtra("category")).
-                                                                        collection("news").document(document.getId()).set(liked, SetOptions.merge());
-                                                                viewsdata.put(Category, Count.intValue()+1);
-                                                                db.collection("8151033423").document("views").
-                                                                        set(viewsdata, SetOptions.merge());
-                                                                count++;
-                                                            } else if (count % 2 == 0) {
-                                                                likecount--;
-                                                                Map<String, Object> liked = new HashMap<>();
-                                                                Float temp = (Float.intBitsToFloat(likecount) / Float.intBitsToFloat(nusers.intValue()) * 100);
-                                                                liked.put("likes",likecount);
-                                                                liked.put("plikes",Math.round(temp));
-                                                                likes.setText(Math.round(temp)+ "%" + "liked");
-                                                                FirebaseFirestore.getInstance().collection(getIntent().getStringExtra("date")).
-                                                                        document(getIntent().getStringExtra("category")).
-                                                                        collection("news").document(document.getId()).set(liked, SetOptions.merge());
-                                                                viewsdata.put(Category, Count.intValue()-1);
-                                                                db.collection("8151033423").document("views").
-                                                                        set(viewsdata, SetOptions.merge());
-                                                                count++;
-                                                            } else {
-                                                                likecount++;
-                                                                Map<String, Object> liked = new HashMap<>();
-                                                                Float temp = (Float.intBitsToFloat(likecount) / Float.intBitsToFloat(nusers.intValue()) * 100);
-                                                                liked.put("likes",likecount);
-                                                                liked.put("plikes",Math.round(temp));
-                                                                likes.setText(Math.round(temp)+ "%" + "liked");
-                                                                FirebaseFirestore.getInstance().collection(getIntent().getStringExtra("date")).
-                                                                        document(getIntent().getStringExtra("category")).
-                                                                        collection("news").document(document.getId()).set(liked, SetOptions.merge());
-                                                                viewsdata.put(Category, Count.intValue()+1);
-                                                                db.collection("8151033423").document("views").
-                                                                        set(viewsdata, SetOptions.merge());
-                                                                count++;
-                                                            }
-                                                                        }});
-                                                        }
-                                                    }
-                                                }
-                                            });
-                                }
-                            });
-                }
-            });
+                                                                                }
+                                                                            }
+                                                                        }
+
+                                                                    }
+                                                                });
+
+                                                    }}  }});
+                            }});
+
+            } });
 
 
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-            final  CollectionReference database =db.collection("8151033423")
-                             .document("saved").collection("news");
-                database.whereEqualTo("headline",getIntent().getStringExtra("headline")).get().
-                        addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                db.collection("8151033423").
+                        document("saved").collection("news")
+                        .whereEqualTo("headline", getIntent().getStringExtra("headline")).get().
+                        addOnCompleteListener(new OnCompleteListener<QuerySnapshot>()
+                        {
+                            Map<String, Object> saved = new HashMap<>();
                             @Override
-                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-
+                            public void onComplete(@NonNull Task<QuerySnapshot> task)
+                            {
                                 if (task.getResult().size()==0) {
-                                    Map<String, Object> saved = new HashMap<>();
-                                    saved.put("image", getIntent().getStringExtra("image"));
+                                    saved.put("category", getIntent().getStringExtra("category"));
                                     saved.put("headline", getIntent().getStringExtra("headline"));
-                                    saved.put("category",getIntent().getStringExtra("category"));
+                                    saved.put("image",getIntent().getStringExtra("image"));
                                     saved.put("date",getIntent().getStringExtra("date"));
-                                    database.document().set(saved);
-                                    Toast.makeText(news.this, "News saved successfully.", Toast.LENGTH_SHORT).show();
+                                    saved.put("saved","true");
+                                    saved.put("liked","false");
+                                    db.collection("8151033423").
+                                            document("saved").collection("news").document().set(saved);
+                                    Toast.makeText(context, "News saved successfully.", Toast.LENGTH_SHORT).show();
                                     db.collection("8151033423").document("views").get().
                                             addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                                                 @Override
@@ -260,9 +293,59 @@ public class news extends AppCompatActivity {
                                                     viewsdata.put(Category, value.intValue()+1);
                                                     db.collection("8151033423").document("views").set(viewsdata, SetOptions.merge());
                                                 }});
-                                } else {
-                                    Toast.makeText(news.this, "News already exist in your archive.", Toast.LENGTH_SHORT).show();
                                 }
+                                else {
+                                    for (QueryDocumentSnapshot docs : task.getResult()) {
+                                        if (docs.get("saved").equals("true")) {
+                                            if (docs.get("liked").equals("true")) {
+                                                saved.put("category", FieldValue.delete());
+                                                saved.put("image", FieldValue.delete());
+                                                saved.put("date", FieldValue.delete());
+                                                saved.put("saved", "false");
+                                                FirebaseFirestore.getInstance().collection("8151033423").document("saved")
+                                                        .collection("news").document(docs.getId()).update(saved);
+                                                Toast.makeText(news.this, "News was removed from saved successfully.", Toast.LENGTH_SHORT).show();
+                                            } else {
+                                                FirebaseFirestore.getInstance().collection("8151033423").document("saved")
+                                                        .collection("news").document(docs.getId()).delete();
+                                                Toast.makeText(news.this, "News was removed from saved successfully.", Toast.LENGTH_SHORT).show();
+                                            }
+
+                                        } else {
+                                            db.collection("8151033423").document("views").get().
+                                                    addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                                        @Override
+                                                        public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                                            String Category =getIntent().getStringExtra("category");
+                                                            Number value = (Number) documentSnapshot.get(Category);
+                                                            Map<String, Object> viewsdata = new HashMap<>();
+                                                            viewsdata.put(Category, value.intValue()+1);
+                                                            db.collection("8151033423").document("views").set(viewsdata, SetOptions.merge());
+                                                        }});
+                                            if (docs.get("liked").equals("false")) {
+                                                saved.put("category", getIntent().getStringExtra("category"));
+                                                saved.put("image",getIntent().getStringExtra("image"));
+                                                saved.put("date",getIntent().getStringExtra("date"));
+                                                saved.put("saved", "true");
+                                                FirebaseFirestore.getInstance().collection("8151033423").document("saved")
+                                                        .collection("news").document(docs.getId()).update(saved);
+                                                Toast.makeText(news.this, "News saved successfully.", Toast.LENGTH_SHORT).show();
+                                            } else {
+                                                saved.put("category", getIntent().getStringExtra("category"));
+                                                saved.put("image",getIntent().getStringExtra("image"));
+                                                saved.put("date",getIntent().getStringExtra("date"));
+                                                saved.put("saved", "true");
+                                                FirebaseFirestore.getInstance().collection("8151033423").document("saved")
+                                                        .collection("news").document(docs.getId()).update(saved);
+                                                Toast.makeText(news.this, "News saved successfully.", Toast.LENGTH_SHORT).show();
+                                            }
+
+                                        }
+                                    }
+                                }
+
+
+
                             }});
             }});
     }

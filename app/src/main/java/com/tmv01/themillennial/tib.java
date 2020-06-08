@@ -46,6 +46,7 @@ public class tib<url> extends AppCompatActivity {
     String uno = "8151033423";
     ArrayList<String> data = new ArrayList<>();
     public  String url;
+    Integer like;
 
 
     @Override
@@ -173,10 +174,6 @@ public class tib<url> extends AppCompatActivity {
 
     }
 
-
-    public File exmp(){
-        return getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-    }
 
 
 
