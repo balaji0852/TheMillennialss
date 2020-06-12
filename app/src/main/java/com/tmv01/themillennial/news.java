@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.view.View;
@@ -14,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.loader.content.Loader;
 
@@ -74,7 +76,7 @@ public class news extends AppCompatActivity {
         TextView category = findViewById(R.id.category);
         final TextView likes = findViewById(R.id.nlikes);
         final TextView views = findViewById(R.id.viewcount);
-        ImageButton save = findViewById(R.id.saved);
+        final ImageButton save = findViewById(R.id.saved);
         final ImageButton like = findViewById(R.id.like);
         ImageView Imagedata = findViewById(R.id.imagedata);
         ImageButton share = findViewById(R.id.share);
@@ -176,14 +178,29 @@ public class news extends AppCompatActivity {
                                                                     @Override
                                                                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                                                                         if (task.getResult().size() == 0) {
-                                                                            liked.put("saved", "false");
+                                                                            like.setImageDrawable(getDrawable(R.drawable.black_heart));
+                                                                            Toast.makeText(news.this, "liked", Toast.LENGTH_SHORT).show();
+                                                                            liked.put("saved", false);
                                                                             liked.put("headline", getIntent().getStringExtra("headline"));
-                                                                            liked.put("liked", "true");
-                                                                            likecount[0]++;
-                                                                            Float temp = (Float.intBitsToFloat(likecount[0]) / Float.intBitsToFloat(nusers.intValue()) * 100);
-                                                                            liked.put("likes", likecount[0]);
-                                                                            liked.put("plikes",Math.round(temp));
-                                                                            newsdata.document(document.getId()).set(liked,SetOptions.merge());
+                                                                            liked.put("liked", true);
+                                                                            liked.put("image","no image");
+                                                                            liked.put("date", getIntent().getStringExtra("date"));
+                                                                            liked.put("category", getIntent().getStringExtra("category"));
+                                                                            newsdata.whereEqualTo("headline", getIntent().getStringExtra("headline")).get().
+                                                                                    addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                                                                        @Override
+                                                                                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                                                                            if (task.isSuccessful()) {
+                                                                                                for (final QueryDocumentSnapshot document : task.getResult()) {
+                                                                                                    Number templike = (Number) document.get("likes");
+                                                                                                    Integer likecount = templike.intValue();
+                                                                                                    Map<String, Object> liked = new HashMap<>();
+                                                                                                    likecount++;
+                                                                                                    Float temp = (Float.intBitsToFloat(likecount) / Float.intBitsToFloat(nusers.intValue()) * 100);
+                                                                                                    liked.put("likes", likecount);
+                                                                                                    liked.put("plikes", Math.round(temp));
+                                                                                                    newsdata.document(document.getId()).set(liked, SetOptions.merge());
+                                                                                                }}}});
                                                                             FirebaseFirestore.getInstance().collection("8151033423").document("saved")
                                                                                     .collection("news").document().set(liked);
                                                                             Toast.makeText(news.this, "liked", Toast.LENGTH_SHORT).show();
@@ -200,17 +217,25 @@ public class news extends AppCompatActivity {
                                                                         } else {
                                                                             for (QueryDocumentSnapshot docs : task.getResult()) {
                                                                                 if (docs.get("liked").equals("true")) {
-                                                                                    likecount[0]--;
-                                                                                    Float temp = (Float.intBitsToFloat(likecount[0]) / Float.intBitsToFloat(nusers.intValue()) * 100);
-                                                                                    liked.put("likes", likecount[0]);
-                                                                                    liked.put("plikes",Math.round(temp));
-                                                                                    newsdata.document(document.getId()).set(liked,SetOptions.merge());
+                                                                                    like.setImageDrawable(getDrawable(R.drawable.ic_favorite_black_24dp));
+                                                                                    newsdata.whereEqualTo("headline", getIntent().getStringExtra("headline")).get().
+                                                                                            addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                                                                                @Override
+                                                                                                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                                                                                    if (task.isSuccessful()) {
+                                                                                                        for (final QueryDocumentSnapshot document : task.getResult()) {
+                                                                                                            Number templike = (Number) document.get("likes");
+                                                                                                            Integer likecount = templike.intValue();
+                                                                                                            Map<String, Object> liked = new HashMap<>();
+                                                                                                            likecount--;
+                                                                                                            Float temp = (Float.intBitsToFloat(likecount) / Float.intBitsToFloat(nusers.intValue()) * 100);
+                                                                                                            liked.put("likes", likecount);
+                                                                                                            liked.put("plikes", Math.round(temp));
+                                                                                                            newsdata.document(document.getId()).set(liked, SetOptions.merge());
+                                                                                                        }}}});
 
                                                                                     if (docs.get("saved").equals("true")) {
-                                                                                        liked.put("liked", "false");
-                                                                                        liked.put("saved", "false");
-                                                                                        liked.put("headline", getIntent().getStringExtra("headline"));
-                                                                                        liked.put("liked", "true");
+                                                                                        liked.put("liked", false);
                                                                                         db.collection("8151033423").document("saved")
                                                                                                 .collection("news").document(docs.getId()).update(liked);
                                                                                         Toast.makeText(news.this, "disliked.", Toast.LENGTH_SHORT).show();
@@ -221,18 +246,29 @@ public class news extends AppCompatActivity {
                                                                                     }
 
                                                                                 } else {
-                                                                                    likecount[0]++;
-                                                                                    Float temp = (Float.intBitsToFloat(likecount[0]) / Float.intBitsToFloat(nusers.intValue()) * 100);
-                                                                                    liked.put("likes", likecount[0]);
-                                                                                    liked.put("plikes",Math.round(temp));
-                                                                                    newsdata.document(document.getId()).set(liked,SetOptions.merge());
+                                                                                    like.setImageDrawable(getDrawable(R.drawable.black_heart));
+                                                                                    newsdata.whereEqualTo("headline", getIntent().getStringExtra("headline")).get().
+                                                                                            addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                                                                                @Override
+                                                                                                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                                                                                    if (task.isSuccessful()) {
+                                                                                                        for (final QueryDocumentSnapshot document : task.getResult()) {
+                                                                                                            Number templike = (Number) document.get("likes");
+                                                                                                            Integer likecount = templike.intValue();
+                                                                                                            Map<String, Object> liked = new HashMap<>();
+                                                                                                            likecount--;
+                                                                                                            Float temp = (Float.intBitsToFloat(likecount) / Float.intBitsToFloat(nusers.intValue()) * 100);
+                                                                                                            liked.put("likes", likecount);
+                                                                                                            liked.put("plikes", Math.round(temp));
+                                                                                                            newsdata.document(document.getId()).set(liked, SetOptions.merge());
+                                                                                                        }}}});
                                                                                     if (docs.get("saved").equals("false")) {
-                                                                                        liked.put("liked", "true");
+                                                                                        liked.put("liked", true);
                                                                                         FirebaseFirestore.getInstance().collection("8151033423").document("saved")
                                                                                                 .collection("news").document(docs.getId()).update(liked);
                                                                                         Toast.makeText(news.this, "liked", Toast.LENGTH_SHORT).show();
                                                                                     } else {
-                                                                                        liked.put("liked", "true");
+                                                                                        liked.put("liked", true);
                                                                                         FirebaseFirestore.getInstance().collection("8151033423").document("saved")
                                                                                                 .collection("news").document(docs.getId()).update(liked);
                                                                                         Toast.makeText(news.this, "liked.", Toast.LENGTH_SHORT).show();
@@ -270,19 +306,21 @@ public class news extends AppCompatActivity {
                         addOnCompleteListener(new OnCompleteListener<QuerySnapshot>()
                         {
                             Map<String, Object> saved = new HashMap<>();
+                            @RequiresApi(api = Build.VERSION_CODES.M)
                             @Override
                             public void onComplete(@NonNull Task<QuerySnapshot> task)
                             {
                                 if (task.getResult().size()==0) {
+                                    save.setImageDrawable(getDrawable(R.drawable.black_star));
                                     saved.put("category", getIntent().getStringExtra("category"));
                                     saved.put("headline", getIntent().getStringExtra("headline"));
                                     saved.put("image",getIntent().getStringExtra("image"));
                                     saved.put("date",getIntent().getStringExtra("date"));
-                                    saved.put("saved","true");
-                                    saved.put("liked","false");
+                                    saved.put("saved",true);
+                                    saved.put("liked",false);
                                     db.collection("8151033423").
                                             document("saved").collection("news").document().set(saved);
-                                    Toast.makeText(context, "News saved successfully.", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(news.this, "News saved successfully.", Toast.LENGTH_SHORT).show();
                                     db.collection("8151033423").document("views").get().
                                             addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                                                 @Override
@@ -297,11 +335,10 @@ public class news extends AppCompatActivity {
                                 else {
                                     for (QueryDocumentSnapshot docs : task.getResult()) {
                                         if (docs.get("saved").equals("true")) {
+                                            save.setImageDrawable(getDrawable(R.drawable.ic_grade_black_24dp));
                                             if (docs.get("liked").equals("true")) {
-                                                saved.put("category", FieldValue.delete());
-                                                saved.put("image", FieldValue.delete());
-                                                saved.put("date", FieldValue.delete());
-                                                saved.put("saved", "false");
+                                                saved.put("image","no image");
+                                                saved.put("saved", false);
                                                 FirebaseFirestore.getInstance().collection("8151033423").document("saved")
                                                         .collection("news").document(docs.getId()).update(saved);
                                                 Toast.makeText(news.this, "News was removed from saved successfully.", Toast.LENGTH_SHORT).show();
@@ -312,6 +349,7 @@ public class news extends AppCompatActivity {
                                             }
 
                                         } else {
+                                            save.setImageDrawable(getDrawable(R.drawable.black_star));
                                             db.collection("8151033423").document("views").get().
                                                     addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                                                         @Override
@@ -323,18 +361,14 @@ public class news extends AppCompatActivity {
                                                             db.collection("8151033423").document("views").set(viewsdata, SetOptions.merge());
                                                         }});
                                             if (docs.get("liked").equals("false")) {
-                                                saved.put("category", getIntent().getStringExtra("category"));
                                                 saved.put("image",getIntent().getStringExtra("image"));
-                                                saved.put("date",getIntent().getStringExtra("date"));
-                                                saved.put("saved", "true");
+                                                saved.put("saved", true);
                                                 FirebaseFirestore.getInstance().collection("8151033423").document("saved")
                                                         .collection("news").document(docs.getId()).update(saved);
                                                 Toast.makeText(news.this, "News saved successfully.", Toast.LENGTH_SHORT).show();
                                             } else {
-                                                saved.put("category", getIntent().getStringExtra("category"));
                                                 saved.put("image",getIntent().getStringExtra("image"));
-                                                saved.put("date",getIntent().getStringExtra("date"));
-                                                saved.put("saved", "true");
+                                                saved.put("saved", true);
                                                 FirebaseFirestore.getInstance().collection("8151033423").document("saved")
                                                         .collection("news").document(docs.getId()).update(saved);
                                                 Toast.makeText(news.this, "News saved successfully.", Toast.LENGTH_SHORT).show();
@@ -352,7 +386,8 @@ public class news extends AppCompatActivity {
     public Uri getLocalBitmapUri(Bitmap bmp) {
         Uri bmpUri = null;
         try {
-            File file =  new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), "Themillennial" + System.currentTimeMillis() + ".png");
+            File file =  new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), "Themillennial" + System.currentTimeMillis() + ".jpg" +
+                    "");
             FileOutputStream out = new FileOutputStream(file);
             bmp.compress(Bitmap.CompressFormat.PNG, 90, out);
             out.close();
@@ -366,7 +401,7 @@ public class news extends AppCompatActivity {
         Picasso.get().load(url).into(new Target() {
             @Override public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
                 Intent i = new Intent(Intent.ACTION_SEND);
-                i.setType("image/*");
+                i.setType("image/jpg");
                 i.putExtra(Intent.EXTRA_TEXT, "The Millennial(Beta)News app : News Headline"+getIntent().getStringExtra("headline"));
                 i.putExtra(Intent.EXTRA_STREAM, getLocalBitmapUri(bitmap));
                 startActivity(Intent.createChooser(i, "Share news"));

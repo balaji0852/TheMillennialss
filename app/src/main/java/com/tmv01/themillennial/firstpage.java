@@ -1,5 +1,6 @@
 package com.tmv01.themillennial;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -9,7 +10,11 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
@@ -19,6 +24,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.TimeZone;
 
 import javax.annotation.Nullable;
@@ -26,36 +33,36 @@ import javax.annotation.Nullable;
 public class firstpage extends AppCompatActivity {
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     ArrayList<firstpagedata> leftdata= new ArrayList<>();
+    ArrayList<lsdata> likeddata= new ArrayList<>();
     public RecyclerView firstleftdata,firstpagebottom;
     firstpageadapter pageadapter;
     cyclebottom bottomadapter;
     public static final String DATE_FORMAT ="yyyy-MM-dd";
     String udate;
+
     @Override
     public void onStart() {
         super.onStart();
 
-        if(getIntent().getStringExtra("date")==null)
-        {
+        if (getIntent().getStringExtra("date") == null) {
             @SuppressLint("SimpleDateFormat") SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT);
             dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
             Date today = Calendar.getInstance().getTime();
             udate = dateFormat.format(today);
-        }
-        else{
+        } else {
             udate = getIntent().getStringExtra("date");
         }
 
         assert udate != null;
-        db.collection(udate).document("First page").collection("news").whereEqualTo("category","First page")
-                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+        db.collection(udate).document("First page").collection("news").
+                whereEqualTo("category", "First page")
+                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
                     public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
-
                         leftdata.clear();
                         assert queryDocumentSnapshots != null;
-                        for (QueryDocumentSnapshot retrievedDocSnap : queryDocumentSnapshots) {
-
+                        for (QueryDocumentSnapshot retrievedDocSnap : queryDocumentSnapshots)
+                        {
                             firstpagedata left = retrievedDocSnap.toObject(firstpagedata.class);
                             leftdata.add(left);
                         }
@@ -64,7 +71,44 @@ public class firstpage extends AppCompatActivity {
                     }
                 });
 
+
+        for (int c=0;c<leftdata.size();c++)
+        {
+            firstpagedata data = leftdata.get(c);
+            db.collection("8151033423").document("saved").collection("news").
+                    whereEqualTo("headline",data.getHeadline())
+                    .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                        @Override
+                        public void onEvent(@javax.annotation.Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+                            assert queryDocumentSnapshots != null;
+                            if(queryDocumentSnapshots.size()>0) {
+                                Map<String, Object> liked = new HashMap<>();
+                                liked.put("saved", false);
+                                liked.put("headline", "no headline");
+                                liked.put("liked", false);
+                                liked.put("date", "no date");
+                                liked.put("category","no category");
+                                liked.put("image","no image");
+                            }
+                            else
+                            {
+                                for (QueryDocumentSnapshot retrievedDocSnap : queryDocumentSnapshots) {
+                                    lsdata left = retrievedDocSnap.toObject(lsdata.class);
+                                    likeddata.add(left);
+                                }
+                            }
+                            pageadapter.notifyDataSetChanged();
+                        }
+                    });
+
+        }
+
+
     }
+
+
+
+
 
 
     @SuppressLint("RestrictedApi")
@@ -72,7 +116,6 @@ public class firstpage extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_firstpage);
-//        final TextView title= findViewById(R.id.title);
         Toast.makeText(firstpage.this,udate,Toast.LENGTH_LONG).show();
         Button page2= findViewById(R.id.page3);
         firstleftdata = findViewById(R.id.cycleleft);
@@ -83,11 +126,12 @@ public class firstpage extends AppCompatActivity {
         ((LinearLayoutManager) layoutManager1).setOrientation(RecyclerView.HORIZONTAL);
         firstleftdata.setLayoutManager(layoutManager);
         firstpagebottom.setLayoutManager(layoutManager1);
-        pageadapter  = new firstpageadapter(firstpage.this, leftdata);
+        pageadapter  = new firstpageadapter(firstpage.this, leftdata,likeddata);
         firstleftdata.setAdapter(pageadapter);
         bottomadapter= new cyclebottom(firstpage.this,leftdata);
         firstpagebottom.setAdapter(bottomadapter);
         ImageButton date=findViewById(R.id.date);
+        TextView views = findViewById(R.id.Headlinebackground);
 
 
         date.setOnClickListener(new View.OnClickListener() {
@@ -104,6 +148,7 @@ public class firstpage extends AppCompatActivity {
                 Intent intent = new Intent(firstpage.this, tib.class);
                 intent.putExtra("date",udate);
                 startActivity(intent);
+
             }
         });
 

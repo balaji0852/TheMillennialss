@@ -34,14 +34,18 @@ public class firstpageadapter extends RecyclerView.Adapter<firstpageadapter.MyVi
 
         Context context;
         ArrayList<firstpagedata> firstpageleftdata;
+        ArrayList<lsdata> likeddatas;
 
 
 
 
-    public firstpageadapter(Context context, ArrayList<firstpagedata> firstpageleftdata)
+    public firstpageadapter(Context context, ArrayList<firstpagedata> firstpageleftdata, ArrayList<lsdata> likeddatas)
+
     {
         this.context = context;
         this.firstpageleftdata = firstpageleftdata ;
+        this.likeddatas = likeddatas;
+
     }
 
 
@@ -59,12 +63,24 @@ public class firstpageadapter extends RecyclerView.Adapter<firstpageadapter.MyVi
         public void onBindViewHolder(@NonNull final MyViewHolder myViewHolder, int i) {
         final firstpagedata dataleft=firstpageleftdata.get(i);
         myViewHolder.text.setText(dataleft.getHeadline());
-        myViewHolder.views.setText(  dataleft.getViews()+" views");
-        myViewHolder.likes.setText(dataleft.getPlikes()+"%Liked");
-        Picasso.get().load(dataleft.getImage()).placeholder(R.mipmap.ic_launcher).fit().centerCrop().into(myViewHolder.image);
+//        myViewHolder.text.setText(likeddatas.size());
+
+//        lsdata sandl = likeddatas.get(i);
+//        if (sandl.getLiked().equals("true")) {
+//            myViewHolder.like.setImageDrawable(context.getDrawable(R.drawable.black_heart));
+//        }
+//        if (sandl.getSaved().equals("true")) {
+//            myViewHolder.save.setImageDrawable(context.getDrawable(R.drawable.black_star));
+//        }
+
+
+            myViewHolder.views.setText(  dataleft.getViews()+" views");
+            myViewHolder.likes.setText(dataleft.getPlikes()+"%Liked");
+            Picasso.get().load(dataleft.getImage()).placeholder(R.mipmap.ic_launcher).fit().centerCrop().into(myViewHolder.image);
             final FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-            myViewHolder.liked.setOnClickListener(new View.OnClickListener() {
+
+            myViewHolder.like.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     final CollectionReference newsdata =  db.collection(dataleft.getDate()).
@@ -85,9 +101,13 @@ public class firstpageadapter extends RecyclerView.Adapter<firstpageadapter.MyVi
                                                 @Override
                                                 public void onComplete(@NonNull Task<QuerySnapshot> task) {
                                                     if (task.getResult().size() == 0) {
-                                                        liked.put("saved", "false");
+                                                        myViewHolder.like.setImageDrawable(context.getDrawable(R.drawable.black_heart));
+                                                        liked.put("saved", false);
                                                         liked.put("headline", dataleft.getHeadline());
-                                                        liked.put("liked", "true");
+                                                        liked.put("liked", true);
+                                                        liked.put("date", dataleft.getDate());
+                                                        liked.put("category",dataleft.getCategory());
+                                                        liked.put("image","no image");
                                                         FirebaseFirestore.getInstance().collection("8151033423").document("saved")
                                                                 .collection("news").document().set(liked);
                                                         Toast.makeText(context, "liked", Toast.LENGTH_SHORT).show();
@@ -119,7 +139,9 @@ public class firstpageadapter extends RecyclerView.Adapter<firstpageadapter.MyVi
                                                                     }});
                                                     } else {
                                                         for (QueryDocumentSnapshot docs : task.getResult()) {
-                                                            if (docs.get("liked").equals("true")) {
+
+                                                            if ((Boolean)docs.get("liked")) {
+                                                                myViewHolder.like.setImageDrawable(context.getDrawable(R.drawable.ic_favorite_black_24dp));
                                                                 newsdata.whereEqualTo("headline", dataleft.getHeadline()).get().
                                                                         addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                                                                             @Override
@@ -136,11 +158,8 @@ public class firstpageadapter extends RecyclerView.Adapter<firstpageadapter.MyVi
                                                                                         newsdata.document(document.getId()).set(liked, SetOptions.merge());
                                                                                     }}}});
 
-                                                                if (docs.get("saved").equals("true")) {
-                                                                    liked.put("liked", "false");
-                                                                    liked.put("saved", "false");
-                                                                    liked.put("headline", dataleft.getHeadline());
-                                                                    liked.put("liked", "true");
+                                                                if ((Boolean)docs.get("saved")) {
+                                                                    liked.put("liked", false);
                                                                     db.collection("8151033423").document("saved")
                                                                             .collection("news").document(docs.getId()).update(liked);
                                                                     Toast.makeText(context, "disliked.", Toast.LENGTH_SHORT).show();
@@ -151,13 +170,14 @@ public class firstpageadapter extends RecyclerView.Adapter<firstpageadapter.MyVi
                                                                 }
 
                                                             } else {
-                                                                if (docs.get("saved").equals("false")) {
-                                                                    liked.put("liked", "true");
+                                                                myViewHolder.like.setImageDrawable(context.getDrawable(R.drawable.black_heart));
+                                                                if ((Boolean)docs.get("saved")) {
+                                                                    liked.put("liked", true);
                                                                     FirebaseFirestore.getInstance().collection("8151033423").document("saved")
                                                                             .collection("news").document(docs.getId()).update(liked);
                                                                     Toast.makeText(context, "liked", Toast.LENGTH_SHORT).show();
                                                                 } else {
-                                                                    liked.put("liked", "true");
+                                                                    liked.put("liked", true);
                                                                     FirebaseFirestore.getInstance().collection("8151033423").document("saved")
                                                                             .collection("news").document(docs.getId()).update(liked);
                                                                     Toast.makeText(context, "liked.", Toast.LENGTH_SHORT).show();
@@ -201,7 +221,6 @@ public class firstpageadapter extends RecyclerView.Adapter<firstpageadapter.MyVi
                 } });
 
 
-
             myViewHolder.save.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -215,6 +234,7 @@ public class firstpageadapter extends RecyclerView.Adapter<firstpageadapter.MyVi
                                 public void onComplete(@NonNull Task<QuerySnapshot> task)
                                 {
                                     if (task.getResult().size()==0) {
+                                        myViewHolder.save.setImageDrawable(context.getDrawable(R.drawable.black_star));
                                         db.collection("8151033423").document("views").get().
                                                 addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                                                     @Override
@@ -229,20 +249,19 @@ public class firstpageadapter extends RecyclerView.Adapter<firstpageadapter.MyVi
                                         saved.put("headline", dataleft.getHeadline());
                                         saved.put("image",dataleft.getImage());
                                         saved.put("date",dataleft.getDate());
-                                        saved.put("saved","true");
-                                        saved.put("liked","false");
+                                        saved.put("saved", true);
+                                        saved.put("liked",false);
                                         FirebaseFirestore.getInstance().collection("8151033423").document("saved")
                                                 .collection("news").document().set(saved);
                                         Toast.makeText(context, "News saved successfully.", Toast.LENGTH_SHORT).show();
                                     }
                                     else {
                                         for (QueryDocumentSnapshot docs : task.getResult()) {
-                                            if (docs.get("saved").equals("true")) {
-                                                if (docs.get("liked").equals("true")) {
-                                                    saved.put("category", FieldValue.delete());
-                                                    saved.put("image", FieldValue.delete());
-                                                    saved.put("date", FieldValue.delete());
-                                                    saved.put("saved", "false");
+                                            if ((Boolean)docs.get("saved")) {
+                                                myViewHolder.save.setImageDrawable(context.getDrawable(R.drawable.ic_grade_black_24dp));
+                                                if ((Boolean)docs.get("liked")) {
+                                                    saved.put("saved", false);
+                                                    saved.put("image","no image");
                                                     FirebaseFirestore.getInstance().collection("8151033423").document("saved")
                                                             .collection("news").document(docs.getId()).update(saved);
                                                     Toast.makeText(context, "News was removed from saved successfully.", Toast.LENGTH_SHORT).show();
@@ -253,6 +272,7 @@ public class firstpageadapter extends RecyclerView.Adapter<firstpageadapter.MyVi
                                                 }
 
                                             } else {
+                                                myViewHolder.save.setImageDrawable(context.getDrawable(R.drawable.black_star));
                                                 db.collection("8151033423").document("views").get().
                                                         addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                                                             @Override
@@ -263,19 +283,15 @@ public class firstpageadapter extends RecyclerView.Adapter<firstpageadapter.MyVi
                                                                 viewsdata.put(Category, value.intValue()+1);
                                                                 db.collection("8151033423").document("views").set(viewsdata, SetOptions.merge());
                                                             }});
-                                                if (docs.get("liked").equals("false")) {
-                                                    saved.put("category",dataleft.getCategory());
+                                                if ((Boolean)docs.get("liked")) {
                                                     saved.put("image", dataleft.getImage());
-                                                    saved.put("date", dataleft.getDate());
-                                                    saved.put("saved", "true");
+                                                    saved.put("saved", true);
                                                     FirebaseFirestore.getInstance().collection("8151033423").document("saved")
                                                             .collection("news").document(docs.getId()).update(saved);
                                                     Toast.makeText(context, "News saved successfully.", Toast.LENGTH_SHORT).show();
                                                 } else {
-                                                    saved.put("category",dataleft.getCategory());
                                                     saved.put("image", dataleft.getImage());
-                                                    saved.put("date", dataleft.getDate());
-                                                    saved.put("saved", "true");
+                                                    saved.put("saved", true);
                                                     FirebaseFirestore.getInstance().collection("8151033423").document("saved")
                                                             .collection("news").document(docs.getId()).update(saved);
                                                     Toast.makeText(context, "News saved successfully.", Toast.LENGTH_SHORT).show();
@@ -289,7 +305,6 @@ public class firstpageadapter extends RecyclerView.Adapter<firstpageadapter.MyVi
 
                                 }});
                 }});
-
         myViewHolder.image.setOnClickListener(new View.OnClickListener() {
             Intent data;
             @Override
@@ -344,7 +359,7 @@ public class firstpageadapter extends RecyclerView.Adapter<firstpageadapter.MyVi
         {
             TextView text,views,likes;
             ImageView image;
-            ImageButton liked,save;
+            ImageButton like,save;
             RelativeLayout block;
 
 
@@ -353,7 +368,7 @@ public class firstpageadapter extends RecyclerView.Adapter<firstpageadapter.MyVi
             {
                 super(itemView);
                 likes = itemView.findViewById(R.id.nlikes);
-                liked= itemView.findViewById(R.id.like);
+                like= itemView.findViewById(R.id.like);
                 text = itemView.findViewById(R.id.tbtext);
                 views = itemView.findViewById(R.id.viewcount);
                 image= itemView.findViewById(R.id.timage);

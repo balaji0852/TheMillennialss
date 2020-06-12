@@ -77,6 +77,7 @@ public class newsadapter extends RecyclerView.Adapter<newsadapter.MyViewHolder> 
         final FirebaseFirestore db = FirebaseFirestore.getInstance();
 
 
+
         myViewHolder.like.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -91,127 +92,131 @@ public class newsadapter extends RecyclerView.Adapter<newsadapter.MyViewHolder> 
                             public void onSuccess(DocumentSnapshot documentSnapshot) {
                                 final Number nusers = (Number) documentSnapshot.get("users");
 
-                                                        database.whereEqualTo("headline", dataleft.getHeadline()).get().
-                                                                addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                                                                    Map<String, Object> liked = new HashMap<>();
+                                database.whereEqualTo("headline", dataleft.getHeadline()).get().
+                                        addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                            Map<String, Object> liked = new HashMap<>();
 
-                                                                    @Override
-                                                                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                                                        if (task.getResult().size() == 0) {
-                                                                            liked.put("saved", "false");
-                                                                            liked.put("headline", dataleft.getHeadline());
-                                                                            liked.put("liked", "true");
-                                                                            FirebaseFirestore.getInstance().collection("8151033423").document("saved")
-                                                                                    .collection("news").document().set(liked);
-                                                                            Toast.makeText(context, "liked", Toast.LENGTH_SHORT).show();
-                                                                            newsdata.whereEqualTo("headline", dataleft.getHeadline()).get().
-                                                                                    addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                                                                                        @Override
-                                                                                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                                                                            if (task.isSuccessful()) {
-                                                                                                for (final QueryDocumentSnapshot document : task.getResult()) {
-                                                                                                    Number templike = (Number) document.get("likes");
-                                                                                                    Integer likecount = templike.intValue();
-                                                                                                    Map<String, Object> liked = new HashMap<>();
-                                                                                                    likecount++;
-                                                                                                    Float temp = (Float.intBitsToFloat(likecount) / Float.intBitsToFloat(nusers.intValue()) * 100);
-                                                                                                    liked.put("likes", likecount);
-                                                                                                    liked.put("plikes", Math.round(temp));
-                                                                                                    newsdata.document(document.getId()).set(liked, SetOptions.merge());
-                                                                                                }}}});
+                                            @Override
+                                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                                if (task.getResult().size() == 0) {
+                                                    myViewHolder.like.setImageDrawable(context.getDrawable(R.drawable.black_heart));
+                                                    liked.put("saved", false);
+                                                    liked.put("headline", dataleft.getHeadline());
+                                                    liked.put("liked", true);
+                                                    liked.put("date", dataleft.getDate());
+                                                    liked.put("category",dataleft.getCategory());
+                                                    liked.put("image","no image");
+                                                    FirebaseFirestore.getInstance().collection("8151033423").document("saved")
+                                                            .collection("news").document().set(liked);
+                                                    Toast.makeText(context, "liked", Toast.LENGTH_SHORT).show();
+                                                    newsdata.whereEqualTo("headline", dataleft.getHeadline()).get().
+                                                            addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                                                @Override
+                                                                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                                                    if (task.isSuccessful()) {
+                                                                        for (final QueryDocumentSnapshot document : task.getResult()) {
+                                                                            Number templike = (Number) document.get("likes");
+                                                                            Integer likecount = templike.intValue();
+                                                                            Map<String, Object> liked = new HashMap<>();
+                                                                            likecount++;
+                                                                            Float temp = (Float.intBitsToFloat(likecount) / Float.intBitsToFloat(nusers.intValue()) * 100);
+                                                                            liked.put("likes", likecount);
+                                                                            liked.put("plikes", Math.round(temp));
+                                                                            newsdata.document(document.getId()).set(liked, SetOptions.merge());
+                                                                        }}}});
 
-                                                                            db.collection("8151033423").document("views").get().
-                                                                                    addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                                                                                        @Override
-                                                                                        public void onSuccess(DocumentSnapshot documentSnapshot) {
-                                                                                            String Category =dataleft.getCategory();
-                                                                                            Number value = (Number) documentSnapshot.get(Category);
-                                                                                            Map<String, Object> viewsdata = new HashMap<>();
-                                                                                            viewsdata.put(Category, value.intValue()+1);
-                                                                                            db.collection("8151033423").document("views").set(viewsdata, SetOptions.merge());
-                                                                                        }});
-                                                                        } else {
-                                                                            for (QueryDocumentSnapshot docs : task.getResult()) {
-                                                                                if (docs.get("liked").equals("true")) {
-                                                                                    newsdata.whereEqualTo("headline", dataleft.getHeadline()).get().
-                                                                                            addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                                                                                                @Override
-                                                                                                public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                                                                                    if (task.isSuccessful()) {
-                                                                                                        for (final QueryDocumentSnapshot document : task.getResult()) {
-                                                                                                            Number templike = (Number) document.get("likes");
-                                                                                                            Integer likecount = templike.intValue();
-                                                                                                            Map<String, Object> liked = new HashMap<>();
-                                                                                                            likecount--;
-                                                                                                            Float temp = (Float.intBitsToFloat(likecount) / Float.intBitsToFloat(nusers.intValue()) * 100);
-                                                                                                            liked.put("likes", likecount);
-                                                                                                            liked.put("plikes", Math.round(temp));
-                                                                                                            newsdata.document(document.getId()).set(liked, SetOptions.merge());
-                                                                                                        }}}});
+                                                    db.collection("8151033423").document("views").get().
+                                                            addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                                                @Override
+                                                                public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                                                    String Category =dataleft.getCategory();
+                                                                    Number value = (Number) documentSnapshot.get(Category);
+                                                                    Map<String, Object> viewsdata = new HashMap<>();
+                                                                    viewsdata.put(Category, value.intValue()+1);
+                                                                    db.collection("8151033423").document("views").set(viewsdata, SetOptions.merge());
+                                                                }});
+                                                } else {
+                                                    for (QueryDocumentSnapshot docs : task.getResult()) {
 
-                                                                                    if (docs.get("saved").equals("true")) {
-                                                                                        liked.put("liked", "false");
-                                                                                        liked.put("saved", "false");
-                                                                                        liked.put("headline", dataleft.getHeadline());
-                                                                                        liked.put("liked", "true");
-                                                                                        db.collection("8151033423").document("saved")
-                                                                                                .collection("news").document(docs.getId()).update(liked);
-                                                                                        Toast.makeText(context, "disliked.", Toast.LENGTH_SHORT).show();
-                                                                                    } else {
-                                                                                        db.collection("8151033423").document("saved")
-                                                                                                .collection("news").document(docs.getId()).delete();
-                                                                                        Toast.makeText(context, "disliked.", Toast.LENGTH_SHORT).show();
-                                                                                    }
+                                                        if ((Boolean)docs.get("liked")) {
+                                                            myViewHolder.like.setImageDrawable(context.getDrawable(R.drawable.ic_favorite_black_24dp));
+                                                            newsdata.whereEqualTo("headline", dataleft.getHeadline()).get().
+                                                                    addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                                                        @Override
+                                                                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                                                            if (task.isSuccessful()) {
+                                                                                for (final QueryDocumentSnapshot document : task.getResult()) {
+                                                                                    Number templike = (Number) document.get("likes");
+                                                                                    Integer likecount = templike.intValue();
+                                                                                    Map<String, Object> liked = new HashMap<>();
+                                                                                    likecount--;
+                                                                                    Float temp = (Float.intBitsToFloat(likecount) / Float.intBitsToFloat(nusers.intValue()) * 100);
+                                                                                    liked.put("likes", likecount);
+                                                                                    liked.put("plikes", Math.round(temp));
+                                                                                    newsdata.document(document.getId()).set(liked, SetOptions.merge());
+                                                                                }}}});
 
-                                                                                } else {
-                                                                                    if (docs.get("saved").equals("false")) {
-                                                                                        liked.put("liked", "true");
-                                                                                        FirebaseFirestore.getInstance().collection("8151033423").document("saved")
-                                                                                                .collection("news").document(docs.getId()).update(liked);
-                                                                                        Toast.makeText(context, "liked", Toast.LENGTH_SHORT).show();
-                                                                                    } else {
-                                                                                        liked.put("liked", "true");
-                                                                                        FirebaseFirestore.getInstance().collection("8151033423").document("saved")
-                                                                                                .collection("news").document(docs.getId()).update(liked);
-                                                                                        Toast.makeText(context, "liked.", Toast.LENGTH_SHORT).show();
-                                                                                    }
-                                                                                    db.collection("8151033423").document("views").get().
-                                                                                            addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                                                                                                @Override
-                                                                                                public void onSuccess(DocumentSnapshot documentSnapshot) {
-                                                                                                    String Category =dataleft.getCategory();
-                                                                                                    Number value = (Number) documentSnapshot.get(Category);
-                                                                                                    Map<String, Object> viewsdata = new HashMap<>();
-                                                                                                    viewsdata.put(Category, value.intValue()+1);
-                                                                                                    db.collection("8151033423").document("views").set(viewsdata, SetOptions.merge());
-                                                                                                }});
-                                                                                    newsdata.whereEqualTo("headline", dataleft.getHeadline()).get().
-                                                                                            addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                                                                                                @Override
-                                                                                                public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                                                                                    if (task.isSuccessful()) {
-                                                                                                        for (final QueryDocumentSnapshot document : task.getResult()) {
-                                                                                                            Number templike = (Number) document.get("likes");
-                                                                                                            Integer likecount = templike.intValue();
-                                                                                                            Map<String, Object> liked = new HashMap<>();
-                                                                                                            likecount++;
-                                                                                                            Float temp = (Float.intBitsToFloat(likecount) / Float.intBitsToFloat(nusers.intValue()) * 100);
-                                                                                                            liked.put("likes", likecount);
-                                                                                                            liked.put("plikes", Math.round(temp));
-                                                                                                            newsdata.document(document.getId()).set(liked, SetOptions.merge());
-                                                                                                        }}}});
+                                                            if ((Boolean)docs.get("saved")) {
+                                                                liked.put("liked", false);
+                                                                db.collection("8151033423").document("saved")
+                                                                        .collection("news").document(docs.getId()).update(liked);
+                                                                Toast.makeText(context, "disliked.", Toast.LENGTH_SHORT).show();
+                                                            } else {
+                                                                db.collection("8151033423").document("saved")
+                                                                        .collection("news").document(docs.getId()).delete();
+                                                                Toast.makeText(context, "disliked.", Toast.LENGTH_SHORT).show();
+                                                            }
 
-                                                                                }
-                                                                            }
-                                                                        }
+                                                        } else {
+                                                            myViewHolder.like.setImageDrawable(context.getDrawable(R.drawable.black_heart));
+                                                            if ((Boolean)docs.get("saved")) {
+                                                                liked.put("liked", true);
+                                                                FirebaseFirestore.getInstance().collection("8151033423").document("saved")
+                                                                        .collection("news").document(docs.getId()).update(liked);
+                                                                Toast.makeText(context, "liked", Toast.LENGTH_SHORT).show();
+                                                            } else {
+                                                                liked.put("liked", true);
+                                                                FirebaseFirestore.getInstance().collection("8151033423").document("saved")
+                                                                        .collection("news").document(docs.getId()).update(liked);
+                                                                Toast.makeText(context, "liked.", Toast.LENGTH_SHORT).show();
+                                                            }
+                                                            db.collection("8151033423").document("views").get().
+                                                                    addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                                                        @Override
+                                                                        public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                                                            String Category =dataleft.getCategory();
+                                                                            Number value = (Number) documentSnapshot.get(Category);
+                                                                            Map<String, Object> viewsdata = new HashMap<>();
+                                                                            viewsdata.put(Category, value.intValue()+1);
+                                                                            db.collection("8151033423").document("views").set(viewsdata, SetOptions.merge());
+                                                                        }});
+                                                            newsdata.whereEqualTo("headline", dataleft.getHeadline()).get().
+                                                                    addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                                                        @Override
+                                                                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                                                            if (task.isSuccessful()) {
+                                                                                for (final QueryDocumentSnapshot document : task.getResult()) {
+                                                                                    Number templike = (Number) document.get("likes");
+                                                                                    Integer likecount = templike.intValue();
+                                                                                    Map<String, Object> liked = new HashMap<>();
+                                                                                    likecount++;
+                                                                                    Float temp = (Float.intBitsToFloat(likecount) / Float.intBitsToFloat(nusers.intValue()) * 100);
+                                                                                    liked.put("likes", likecount);
+                                                                                    liked.put("plikes", Math.round(temp));
+                                                                                    newsdata.document(document.getId()).set(liked, SetOptions.merge());
+                                                                                }}}});
 
-                                                                    }
-                                                                });
+                                                        }
+                                                    }
+                                                }
+
+                                            }
+                                        });
 
 
-                                            }});
+                            }});
 
-                            } });
+            } });
 
 
         myViewHolder.save.setOnClickListener(new View.OnClickListener() {
@@ -227,6 +232,7 @@ public class newsadapter extends RecyclerView.Adapter<newsadapter.MyViewHolder> 
                             public void onComplete(@NonNull Task<QuerySnapshot> task)
                             {
                                 if (task.getResult().size()==0) {
+                                    myViewHolder.save.setImageDrawable(context.getDrawable(R.drawable.black_star));
                                     db.collection("8151033423").document("views").get().
                                             addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                                                 @Override
@@ -241,59 +247,55 @@ public class newsadapter extends RecyclerView.Adapter<newsadapter.MyViewHolder> 
                                     saved.put("headline", dataleft.getHeadline());
                                     saved.put("image",dataleft.getImage());
                                     saved.put("date",dataleft.getDate());
-                                    saved.put("saved","true");
-                                    saved.put("liked","false");
+                                    saved.put("saved", true);
+                                    saved.put("liked",false);
                                     FirebaseFirestore.getInstance().collection("8151033423").document("saved")
                                             .collection("news").document().set(saved);
                                     Toast.makeText(context, "News saved successfully.", Toast.LENGTH_SHORT).show();
                                 }
                                 else {
                                     for (QueryDocumentSnapshot docs : task.getResult()) {
-                                                if (docs.get("saved").equals("true")) {
-                                                    if (docs.get("liked").equals("true")) {
-                                                        saved.put("category", FieldValue.delete());
-                                                        saved.put("image", FieldValue.delete());
-                                                        saved.put("date", FieldValue.delete());
-                                                        saved.put("saved", "false");
-                                                        FirebaseFirestore.getInstance().collection("8151033423").document("saved")
-                                                                .collection("news").document(docs.getId()).update(saved);
-                                                        Toast.makeText(context, "News was removed from saved successfully.", Toast.LENGTH_SHORT).show();
-                                                    } else {
-                                                        FirebaseFirestore.getInstance().collection("8151033423").document("saved")
-                                                                .collection("news").document(docs.getId()).delete();
-                                                        Toast.makeText(context, "News was removed from saved successfully.", Toast.LENGTH_SHORT).show();
-                                                    }
+                                        if ((Boolean)docs.get("saved")) {
+                                            myViewHolder.save.setImageDrawable(context.getDrawable(R.drawable.ic_grade_black_24dp));
+                                            if ((Boolean)docs.get("liked")) {
+                                                saved.put("saved", false);
+                                                saved.put("image","no image");
+                                                FirebaseFirestore.getInstance().collection("8151033423").document("saved")
+                                                        .collection("news").document(docs.getId()).update(saved);
+                                                Toast.makeText(context, "News was removed from saved successfully.", Toast.LENGTH_SHORT).show();
+                                            } else {
+                                                FirebaseFirestore.getInstance().collection("8151033423").document("saved")
+                                                        .collection("news").document(docs.getId()).delete();
+                                                Toast.makeText(context, "News was removed from saved successfully.", Toast.LENGTH_SHORT).show();
+                                            }
 
-                                                } else {
-                                                    db.collection("8151033423").document("views").get().
-                                                            addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                                                                @Override
-                                                                public void onSuccess(DocumentSnapshot documentSnapshot) {
-                                                                    String Category =dataleft.getCategory();
-                                                                    Number value = (Number) documentSnapshot.get(Category);
-                                                                    Map<String, Object> viewsdata = new HashMap<>();
-                                                                    viewsdata.put(Category, value.intValue()+1);
-                                                                    db.collection("8151033423").document("views").set(viewsdata, SetOptions.merge());
-                                                                }});
-                                                    if (docs.get("liked").equals("false")) {
-                                                        saved.put("category",dataleft.getCategory());
-                                                        saved.put("image", dataleft.getImage());
-                                                        saved.put("date", dataleft.getDate());
-                                                        saved.put("saved", "true");
-                                                        FirebaseFirestore.getInstance().collection("8151033423").document("saved")
-                                                                .collection("news").document(docs.getId()).update(saved);
-                                                        Toast.makeText(context, "News saved successfully.", Toast.LENGTH_SHORT).show();
-                                                    } else {
-                                                        saved.put("category",dataleft.getCategory());
-                                                        saved.put("image", dataleft.getImage());
-                                                        saved.put("date", dataleft.getDate());
-                                                        saved.put("saved", "true");
-                                                        FirebaseFirestore.getInstance().collection("8151033423").document("saved")
-                                                                .collection("news").document(docs.getId()).update(saved);
-                                                        Toast.makeText(context, "News saved successfully.", Toast.LENGTH_SHORT).show();
-                                                    }
+                                        } else {
+                                            myViewHolder.save.setImageDrawable(context.getDrawable(R.drawable.black_star));
+                                            db.collection("8151033423").document("views").get().
+                                                    addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                                        @Override
+                                                        public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                                            String Category =dataleft.getCategory();
+                                                            Number value = (Number) documentSnapshot.get(Category);
+                                                            Map<String, Object> viewsdata = new HashMap<>();
+                                                            viewsdata.put(Category, value.intValue()+1);
+                                                            db.collection("8151033423").document("views").set(viewsdata, SetOptions.merge());
+                                                        }});
+                                            if ((Boolean)docs.get("liked")) {
+                                                saved.put("image", dataleft.getImage());
+                                                saved.put("saved", true);
+                                                FirebaseFirestore.getInstance().collection("8151033423").document("saved")
+                                                        .collection("news").document(docs.getId()).update(saved);
+                                                Toast.makeText(context, "News saved successfully.", Toast.LENGTH_SHORT).show();
+                                            } else {
+                                                saved.put("image", dataleft.getImage());
+                                                saved.put("saved", true);
+                                                FirebaseFirestore.getInstance().collection("8151033423").document("saved")
+                                                        .collection("news").document(docs.getId()).update(saved);
+                                                Toast.makeText(context, "News saved successfully.", Toast.LENGTH_SHORT).show();
+                                            }
 
-                                                }
+                                        }
                                     }
                                 }
 
@@ -328,7 +330,7 @@ public class newsadapter extends RecyclerView.Adapter<newsadapter.MyViewHolder> 
                         @Override public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
 
                             Intent i = new Intent(Intent.ACTION_SEND);
-                            i.setType("image/*");
+                            i.setType("image/jpg");
                             i.putExtra(Intent.EXTRA_TEXT, "The Millennial(Beta)News app : News Headline :"+dataleft.getHeadline());
                             i.putExtra(Intent.EXTRA_STREAM, getLocalBitmapUri(bitmap));
                             view.getContext().startActivity(Intent.createChooser(i, "Share news"));
@@ -397,7 +399,7 @@ public class newsadapter extends RecyclerView.Adapter<newsadapter.MyViewHolder> 
     public Uri getLocalBitmapUri(Bitmap bmp) {
         Uri bmpUri = null;
         try {
-            File file =  new File(context.getExternalFilesDir(Environment.DIRECTORY_PICTURES), "Themillennial" + System.currentTimeMillis() + ".png");
+            File file =  new File(context.getExternalFilesDir(Environment.DIRECTORY_PICTURES), "Themillennial" + System.currentTimeMillis() + ".jpg");
             FileOutputStream out = new FileOutputStream(file);
             bmp.compress(Bitmap.CompressFormat.PNG, 90, out);
             out.close();

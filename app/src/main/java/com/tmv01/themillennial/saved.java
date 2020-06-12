@@ -31,7 +31,7 @@ public class saved extends AppCompatActivity {
         super.onStart();
 
         db.collection("8151033423").document("saved")
-                .collection("news")
+                .collection("news").whereEqualTo("saved","true")
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
                     public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
@@ -45,6 +45,7 @@ public class saved extends AppCompatActivity {
                         saves.notifyDataSetChanged();
                     }
                 });
+
     }
 
 
