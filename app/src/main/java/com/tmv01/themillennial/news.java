@@ -84,8 +84,24 @@ public class news extends AppCompatActivity {
         Headline.setText(getIntent().getStringExtra("headline"));
         category.setText(getIntent().getStringExtra("title"));
         Picasso.get().load(getIntent().getStringExtra("image")).placeholder(R.mipmap.ic_launcher).fit().centerCrop().into(Imagedata);
-
-
+        db.collection("8151033423").document("saved").collection("news").
+                whereEqualTo("headline",getIntent().getStringExtra("headline")).get().
+                addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (final QueryDocumentSnapshot document : task.getResult()) {
+                               if ((Boolean)document.get("saved"))
+                               {
+                                   save.setImageDrawable(getDrawable(R.drawable.black_star));
+                               }
+                                if ((Boolean)document.get("liked"))
+                                {
+                                    like.setImageDrawable(getDrawable(R.drawable.black_heart));
+                                }
+                            }
+                        }
+                    }});
 
               db.collection(Objects.requireNonNull(getIntent().getStringExtra("date"))).
                 document(Objects.requireNonNull(getIntent().getStringExtra("category"))).
@@ -100,7 +116,7 @@ public class news extends AppCompatActivity {
                                                     Number tempview = (Number) document.get("views");
                                                     templike = (Number) document.get("plikes");
                                                     assert templike != null;
-                                                    likes.setText(String.format("%s liked", templike.intValue()));
+                                                    likes.setText( templike.intValue()+"% users liked");
                                                     Integer value = tempview.intValue() + 1;
                                                     views.setText(String.format("%s views", value));
                                                     Map<String, Object> viewed = new HashMap<>();
@@ -129,7 +145,7 @@ public class news extends AppCompatActivity {
                                                                                     collection("news")
                                                                                     .document(document.getId()).set(viewed, SetOptions.merge());
                                                                             Textualdata.setText(getIntent().getStringExtra("textualdata"));
-                                                                            likes.setText(plikes + "% liked");
+                                                                            likes.setText(plikes + "% users liked");
                                                                             views.setText(getIntent().getIntExtra("views", 0) + "views");
                                                                         }
                                                                     }
@@ -216,7 +232,7 @@ public class news extends AppCompatActivity {
                                                                                         }});
                                                                         } else {
                                                                             for (QueryDocumentSnapshot docs : task.getResult()) {
-                                                                                if (docs.get("liked").equals("true")) {
+                                                                                if ((Boolean)docs.get("liked")) {
                                                                                     like.setImageDrawable(getDrawable(R.drawable.ic_favorite_black_24dp));
                                                                                     newsdata.whereEqualTo("headline", getIntent().getStringExtra("headline")).get().
                                                                                             addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -234,7 +250,7 @@ public class news extends AppCompatActivity {
                                                                                                             newsdata.document(document.getId()).set(liked, SetOptions.merge());
                                                                                                         }}}});
 
-                                                                                    if (docs.get("saved").equals("true")) {
+                                                                                    if ((Boolean)docs.get("saved")) {
                                                                                         liked.put("liked", false);
                                                                                         db.collection("8151033423").document("saved")
                                                                                                 .collection("news").document(docs.getId()).update(liked);
@@ -262,7 +278,7 @@ public class news extends AppCompatActivity {
                                                                                                             liked.put("plikes", Math.round(temp));
                                                                                                             newsdata.document(document.getId()).set(liked, SetOptions.merge());
                                                                                                         }}}});
-                                                                                    if (docs.get("saved").equals("false")) {
+                                                                                    if ((Boolean)docs.get("saved")) {
                                                                                         liked.put("liked", true);
                                                                                         FirebaseFirestore.getInstance().collection("8151033423").document("saved")
                                                                                                 .collection("news").document(docs.getId()).update(liked);
@@ -334,9 +350,9 @@ public class news extends AppCompatActivity {
                                 }
                                 else {
                                     for (QueryDocumentSnapshot docs : task.getResult()) {
-                                        if (docs.get("saved").equals("true")) {
+                                        if ((Boolean)docs.get("saved")) {
                                             save.setImageDrawable(getDrawable(R.drawable.ic_grade_black_24dp));
-                                            if (docs.get("liked").equals("true")) {
+                                            if ((Boolean)docs.get("liked")) {
                                                 saved.put("image","no image");
                                                 saved.put("saved", false);
                                                 FirebaseFirestore.getInstance().collection("8151033423").document("saved")
@@ -360,7 +376,7 @@ public class news extends AppCompatActivity {
                                                             viewsdata.put(Category, value.intValue()+1);
                                                             db.collection("8151033423").document("views").set(viewsdata, SetOptions.merge());
                                                         }});
-                                            if (docs.get("liked").equals("false")) {
+                                            if ((Boolean)docs.get("liked")) {
                                                 saved.put("image",getIntent().getStringExtra("image"));
                                                 saved.put("saved", true);
                                                 FirebaseFirestore.getInstance().collection("8151033423").document("saved")

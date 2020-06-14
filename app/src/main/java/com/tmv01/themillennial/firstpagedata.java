@@ -5,11 +5,13 @@ import android.media.Image;
 public class firstpagedata {
     String aid,category,date,headline,poname,image,textualdata;
     Integer Views,plikes,likes;
+//    Boolean saved,liked;
+//, Integer likes,Boolean saved,Boolean liked
 
 
-
-    public firstpagedata(String aid, String category, String date, String headline, String poname, String image, String textualdata,
-                         Integer views,Integer plikes,Integer likes){
+    public firstpagedata(String aid, String category, String date,
+                         String headline, String poname, String image, String textualdata,
+                         Integer views, Integer plikes) {
         this.aid = aid;
         this.category = category;
         this.date = date;
@@ -20,8 +22,8 @@ public class firstpagedata {
         this.Views = views;
         this.plikes = plikes;
         this.likes = likes;
-
-
+//        this.saved = saved;
+//        this.liked = liked;
     }
 
     public Integer getLikes() {
@@ -31,6 +33,22 @@ public class firstpagedata {
     public firstpagedata(){
 
     }
+
+//    public void setLiked(Boolean liked) {
+//        this.liked = liked;
+//    }
+//
+//    public void setSaved(Boolean saved) {
+//        this.saved = saved;
+//    }
+//
+//    public Boolean getSaved() {
+//        return saved;
+//    }
+//
+//    public Boolean getLiked() {
+//        return liked;
+//    }
 
     public Integer getPlikes() {
         return plikes;
@@ -82,6 +100,14 @@ public class firstpagedata {
 
     public void setTextualdata(String textualdata) {
         this.textualdata = textualdata;
+    }
+
+    public void setPlikes(Integer plikes) {
+        this.plikes = plikes;
+    }
+
+    public void setLikes(Integer likes) {
+        this.likes = likes;
     }
 
     public String getImage() {

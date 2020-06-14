@@ -70,10 +70,22 @@ public class newsadapter extends RecyclerView.Adapter<newsadapter.MyViewHolder> 
     @Override
     public void onBindViewHolder(@NonNull final MyViewHolder myViewHolder, int i) {
         final firstpagedata dataleft=maindata.get(i);
+        if (dataleft.getAid().equals("true")) {
+            myViewHolder.like.setImageDrawable(context.getDrawable(R.drawable.black_heart));
+        }
+//        else{
+//            myViewHolder.like.setImageDrawable(context.getDrawable(R.drawable.ic_favorite_black_24dp));
+//        }
+        if (dataleft.getPoname().equals("true")) {
+            myViewHolder.save.setImageDrawable(context.getDrawable(R.drawable.black_star));
+        }
+//        else{
+//            myViewHolder.save.setImageDrawable(context.getDrawable(R.drawable.ic_grade_black_24dp));
+//        }
         myViewHolder.text.setText(dataleft.getHeadline());
         Picasso.get().load(dataleft.getImage()).placeholder(R.mipmap.ic_launcher).fit().centerCrop().into(myViewHolder.image);
         myViewHolder.views.setText(dataleft.getViews()+" Views");
-        myViewHolder.nlikes.setText(dataleft.getPlikes()+ "%Liked");
+        myViewHolder.nlikes.setText(dataleft.getPlikes()+ "% users liked");
         final FirebaseFirestore db = FirebaseFirestore.getInstance();
 
 

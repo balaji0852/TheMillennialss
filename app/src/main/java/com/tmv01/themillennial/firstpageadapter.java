@@ -34,17 +34,17 @@ public class firstpageadapter extends RecyclerView.Adapter<firstpageadapter.MyVi
 
         Context context;
         ArrayList<firstpagedata> firstpageleftdata;
-        ArrayList<lsdata> likeddatas;
+//        ArrayList<lsdata> likeddata;
+//        ,ArrayList<lsdata> likeddata
 
 
 
-
-    public firstpageadapter(Context context, ArrayList<firstpagedata> firstpageleftdata, ArrayList<lsdata> likeddatas)
+    public firstpageadapter(Context context, ArrayList<firstpagedata> firstpageleftdata)
 
     {
         this.context = context;
         this.firstpageleftdata = firstpageleftdata ;
-        this.likeddatas = likeddatas;
+//        this.likeddata = likeddata;
 
     }
 
@@ -57,28 +57,31 @@ public class firstpageadapter extends RecyclerView.Adapter<firstpageadapter.MyVi
 
         View view = inflater.inflate(R.layout.cycleleftcontent, viewGroup, false);
         return new MyViewHolder(view);
-    }
+        }
 
         @Override
         public void onBindViewHolder(@NonNull final MyViewHolder myViewHolder, int i) {
+
         final firstpagedata dataleft=firstpageleftdata.get(i);
-        myViewHolder.text.setText(dataleft.getHeadline());
-//        myViewHolder.text.setText(likeddatas.size());
 
-//        lsdata sandl = likeddatas.get(i);
-//        if (sandl.getLiked().equals("true")) {
-//            myViewHolder.like.setImageDrawable(context.getDrawable(R.drawable.black_heart));
+        if (dataleft.getAid().equals("true")) {
+            myViewHolder.like.setImageDrawable(context.getDrawable(R.drawable.black_heart));
+        }
+//        else{
+//            myViewHolder.like.setImageDrawable(context.getDrawable(R.drawable.ic_favorite_black_24dp));
 //        }
-//        if (sandl.getSaved().equals("true")) {
-//            myViewHolder.save.setImageDrawable(context.getDrawable(R.drawable.black_star));
+        if (dataleft.getPoname().equals("true")) {
+            myViewHolder.save.setImageDrawable(context.getDrawable(R.drawable.black_star));
+        }
+//        else{
+//            myViewHolder.save.setImageDrawable(context.getDrawable(R.drawable.ic_grade_black_24dp));
 //        }
 
-
-            myViewHolder.views.setText(  dataleft.getViews()+" views");
-            myViewHolder.likes.setText(dataleft.getPlikes()+"%Liked");
+            myViewHolder.text.setText(dataleft.getHeadline());
+            myViewHolder.views.setText(dataleft.getViews()+" views");
+            myViewHolder.likes.setText(dataleft.getPlikes()+"% users liked");
             Picasso.get().load(dataleft.getImage()).placeholder(R.mipmap.ic_launcher).fit().centerCrop().into(myViewHolder.image);
             final FirebaseFirestore db = FirebaseFirestore.getInstance();
-
 
             myViewHolder.like.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -350,7 +353,9 @@ public class firstpageadapter extends RecyclerView.Adapter<firstpageadapter.MyVi
         @Override
         public int getItemCount()
     {
+
         return firstpageleftdata.size();
+
     }
 
 

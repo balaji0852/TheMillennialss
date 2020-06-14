@@ -1,5 +1,4 @@
 package com.tmv01.themillennial;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -12,7 +11,6 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.EventListener;
@@ -23,17 +21,17 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.TimeZone;
-
 import javax.annotation.Nullable;
 
 public class firstpage extends AppCompatActivity {
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     ArrayList<firstpagedata> leftdata= new ArrayList<>();
-    ArrayList<lsdata> likeddata= new ArrayList<>();
+    ArrayList<firstpagedata> lsdatas= new ArrayList<>();
     public RecyclerView firstleftdata,firstpagebottom;
     firstpageadapter pageadapter;
     cyclebottom bottomadapter;
@@ -58,55 +56,108 @@ public class firstpage extends AppCompatActivity {
                 whereEqualTo("category", "First page")
                  .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
-                    public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+                    public void onEvent(@Nullable final QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
                         leftdata.clear();
                         assert queryDocumentSnapshots != null;
                         for (QueryDocumentSnapshot retrievedDocSnap : queryDocumentSnapshots)
                         {
-                            firstpagedata left = retrievedDocSnap.toObject(firstpagedata.class);
+                            final firstpagedata left = retrievedDocSnap.toObject(firstpagedata.class);
+                            db.collection("8151033423").document("saved").collection("news").
+                                    whereEqualTo("headline",left.getHeadline()).get().
+                                    addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                         if(task.isSuccessful())
+                                         {
+                                             for (final QueryDocumentSnapshot document : task.getResult())
+                                             {
+                                                 if ((Boolean)document.get("saved")){
+                                                     left.setPoname("true");
+                                                 }
+                                                 else{
+                                                     left.setPoname("false");
+                                                 }
+                                                 if ((Boolean) document.get("liked")){
+                                                     left.setAid("true");
+                                                 }
+                                                 else{
+                                                     left.setAid("false");
+                                                 }
+                                             }
+                                             pageadapter.notifyDataSetChanged();
+                                             bottomadapter.notifyDataSetChanged();
+                                         }
+                                         else {
+                                             left.setPoname("false");
+                                             left.setAid("false");
+                                             }
+                                        }
+                                    });
                             leftdata.add(left);
                         }
                         pageadapter.notifyDataSetChanged();
                         bottomadapter.notifyDataSetChanged();
+
                     }
                 });
 
-
-        for (int c=0;c<leftdata.size();c++)
-        {
-            firstpagedata data = leftdata.get(c);
-            db.collection("8151033423").document("saved").collection("news").
-                    whereEqualTo("headline",data.getHeadline())
-                    .addSnapshotListener(new EventListener<QuerySnapshot>() {
-                        @Override
-                        public void onEvent(@javax.annotation.Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
-                            assert queryDocumentSnapshots != null;
-                            if(queryDocumentSnapshots.size()>0) {
-                                Map<String, Object> liked = new HashMap<>();
-                                liked.put("saved", false);
-                                liked.put("headline", "no headline");
-                                liked.put("liked", false);
-                                liked.put("date", "no date");
-                                liked.put("category","no category");
-                                liked.put("image","no image");
-                            }
-                            else
-                            {
-                                for (QueryDocumentSnapshot retrievedDocSnap : queryDocumentSnapshots) {
-                                    lsdata left = retrievedDocSnap.toObject(lsdata.class);
-                                    likeddata.add(left);
-                                }
-                            }
-                            pageadapter.notifyDataSetChanged();
-                        }
-                    });
-
-        }
-
-
     }
 
-
+    public void like(ArrayList<firstpagedata> sample)
+    {
+        for (int i = 0; i <sample.size(); i++)
+        {
+            final firstpagedata datas = sample.get(i);
+            final firstpagedata data = lsdatas.get(i);
+            db.collection("8151033423").document("saved").collection("news").
+                    whereEqualTo("headline",datas.getHeadline()).get().
+                    addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            if(task.isSuccessful())
+                            {
+                                for (final QueryDocumentSnapshot document : task.getResult()) {
+                                    data.setImage("null");
+                                    data.setTextualdata("null");
+                                    data.setAid("null");
+                                    data.setPoname("null");
+                                    data.setViews(0);
+                                    data.setHeadline("null");
+                                    data.setDate("null");
+                                    data.setCategory("null");
+                                    if((Boolean)document.get("liked"))
+                                    {
+                                        data.setLikes(1);
+                                    }
+                                    else{
+                                        data.setLikes(0);
+                                    }
+                                    if((Boolean)document.get("saved"))
+                                    {
+                                        data.setPlikes(1);
+                                    }
+                                    else{
+                                        data.setPlikes(0);
+                                    }
+                                }
+                            }
+                            else {
+                                data.setImage("null");
+                                data.setTextualdata("null");
+                                data.setAid("null");
+                                data.setPoname("null");
+                                data.setViews(0);
+                                data.setHeadline("null");
+                                data.setDate("null");
+                                data.setCategory("null");
+                                data.setLikes(0);
+                                data.setLikes(0);
+                            }
+                        }
+                    });
+        }
+        leftdata.addAll(lsdatas);
+    }
 
 
 
@@ -126,7 +177,7 @@ public class firstpage extends AppCompatActivity {
         ((LinearLayoutManager) layoutManager1).setOrientation(RecyclerView.HORIZONTAL);
         firstleftdata.setLayoutManager(layoutManager);
         firstpagebottom.setLayoutManager(layoutManager1);
-        pageadapter  = new firstpageadapter(firstpage.this, leftdata,likeddata);
+        pageadapter  = new firstpageadapter(firstpage.this,leftdata);
         firstleftdata.setAdapter(pageadapter);
         bottomadapter= new cyclebottom(firstpage.this,leftdata);
         firstpagebottom.setAdapter(bottomadapter);

@@ -1,4 +1,5 @@
 package com.tmv01.themillennial;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -16,7 +17,9 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -61,7 +64,37 @@ public class tib<url> extends AppCompatActivity {
                         maindata.clear();
                         for (QueryDocumentSnapshot retrievedDocSnap : queryDocumentSnapshots) {
 
-                            firstpagedata main= retrievedDocSnap.toObject(firstpagedata.class);
+                            final firstpagedata main= retrievedDocSnap.toObject(firstpagedata.class);
+                            db.collection("8151033423").document("saved").collection("news").
+                                    whereEqualTo("headline",main.getHeadline()).get().
+                                    addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                            if(task.isSuccessful())
+                                            {
+                                                for (final QueryDocumentSnapshot document : task.getResult())
+                                                {
+                                                    if ((Boolean)document.get("saved")){
+                                                        main.setPoname("true");
+                                                    }
+                                                    else{
+                                                        main.setPoname("false");
+                                                    }
+                                                    if ((Boolean) document.get("liked")){
+                                                        main.setAid("true");
+                                                    }
+                                                    else{
+                                                        main.setAid("false");
+                                                    }
+                                                }
+                                                newspage.notifyDataSetChanged();
+                                            }
+                                            else {
+                                                main.setPoname("false");
+                                                main.setAid("false");
+                                            }
+                                        }
+                                    });
                             maindata.add(main);
                         }
                         newspage.notifyDataSetChanged();
