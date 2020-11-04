@@ -1,122 +1,164 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".preference">
 
-    <Button
-        android:id="@+id/Sports"
-        android:layout_width="125dp"
-        android:layout_height="55dp"
-        android:text="Sports"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.22"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.18"
-        android:background="@color/white"
-        android:textColor="@color/black"/>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-    <Button
-        android:id="@+id/Technology"
-        android:layout_width="125dp"
-        android:layout_height="55dp"
-        android:text="Technology"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.765"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.18"
-        android:background="@color/white"
-        android:textColor="@color/black"/>
+        <ImageButton
+            android:layout_marginTop="10dp"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="15dp"
+            android:layout_alignParentTop="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/backButton"
+            android:src="@drawable/ic_baseline_arrow_back_24"/>
 
-    <Button
-        android:id="@+id/Autonews"
-        android:layout_width="125dp"
-        android:layout_height="55dp"
-        android:text="Auto news"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.22"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.321"
-        android:background="@color/white"
-        android:textColor="@color/black"/>
 
-    <Button
-        android:id="@+id/Politics"
-        android:layout_width="125dp"
-        android:layout_height="55dp"
-        android:text="Politics"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.765"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.321"
-        android:background="@color/white"
-        android:textColor="@color/black"/>
+        <TextView
+            android:id="@+id/preference"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/bangers"
+            android:text="@string/preference"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:paddingRight="10dp"
+            android:paddingLeft="10dp"
+            android:textColor="@color/red"
+            android:layout_marginTop="10dp"
+            android:textSize="28sp"/>
 
-    <Button
-        android:id="@+id/Fashion"
-        android:layout_width="125dp"
-        android:layout_height="55dp"
-        android:text="Fashion"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.22"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.471"
-        android:background="@color/white"
-        android:textColor="@color/black"/>
 
-    <Button
-        android:id="@+id/entertainment"
-        android:layout_width="125dp"
-        android:layout_height="55dp"
-        android:text="Entertainment"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.765"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.471"
-        android:background="@color/white"
-        android:textColor="@color/black"/>
+        <LinearLayout
+             android:layout_centerHorizontal="true"
+            android:layout_marginTop="70dp"
+            android:id="@+id/ll1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="15dp"
+            android:paddingBottom="15dp"
+            android:orientation="horizontal"
+            tools:ignore="UselessParent">
 
-    <Button
-        android:id="@+id/Education"
-        android:layout_width="125dp"
-        android:layout_height="55dp"
-        android:layout_marginStart="10dp"
-        android:text="Education"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.192"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.625"
-        android:background="@color/white"
-        android:textColor="@color/black"/>
+            <Button
+                android:id="@+id/Sports"
+                android:layout_width="125dp"
+                android:layout_height="55dp"
+                android:text="@string/sports"
+                android:background="@color/white"
+                android:textColor="@color/black"
+                tools:ignore="ButtonStyle"
+                android:layout_marginEnd="40dp"/>
 
-    <Button
-        android:id="@+id/tib"
-        android:layout_width="125dp"
-        android:layout_height="55dp"
-        android:text="Talks in Bangalore"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.765"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.625"
-        android:background="@color/white"
-        android:textColor="@color/black"/>
+            <Button
+                android:id="@+id/Technology"
+                android:layout_width="125dp"
+                android:layout_height="55dp"
+                android:text="@string/Technology"
+                android:background="@color/white"
+                android:textColor="@color/black"
+                tools:ignore="ButtonStyle" />
+        </LinearLayout>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+
+        <LinearLayout
+            android:id="@+id/ll2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:paddingTop="15dp"
+            android:paddingBottom="15dp"
+            android:orientation="horizontal"
+            android:layout_below="@+id/ll1"
+            tools:ignore="UselessParent">
+
+            <Button
+                android:id="@+id/Politics"
+                android:layout_width="125dp"
+                android:layout_height="55dp"
+                android:text="@string/Politics"
+                android:background="@color/white"
+                android:textColor="@color/black"
+                tools:ignore="ButtonStyle"
+                android:layout_marginEnd="40dp"/>
+
+            <Button
+                android:id="@+id/Fashion"
+                android:layout_width="125dp"
+                android:layout_height="55dp"
+                android:text="@string/Fashion"
+                android:background="@color/white"
+                android:textColor="@color/black"
+                tools:ignore="ButtonStyle" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:paddingTop="15dp"
+            android:paddingBottom="15dp"
+            android:layout_below="@id/ll2"
+            android:orientation="horizontal"
+            tools:ignore="UselessParent">
+
+            <Button
+                android:id="@+id/Entertainment"
+                android:layout_width="125dp"
+                android:layout_height="55dp"
+                android:text="@string/Entertainment"
+                android:background="@color/white"
+                android:textColor="@color/black"
+                tools:ignore="ButtonStyle"
+                android:layout_marginEnd="40dp"/>
+
+            <Button
+                android:id="@+id/Education"
+                android:layout_width="125dp"
+                android:layout_height="55dp"
+                android:text="@string/Education"
+                android:background="@color/white"
+                android:textColor="@color/black"
+                tools:ignore="ButtonStyle" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="15dp"
+            android:paddingBottom="15dp"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/ll3"
+            android:orientation="horizontal"
+            tools:ignore="UselessParent">
+
+            <Button
+                android:id="@+id/AutoNews"
+                android:layout_width="125dp"
+                android:layout_height="55dp"
+                android:text="@string/autoNews"
+                android:background="@color/white"
+                android:textColor="@color/black"
+                tools:ignore="ButtonStyle"
+                android:layout_marginEnd="40dp"/>
+
+            <Button
+                android:id="@+id/tib"
+                android:layout_width="125dp"
+                android:layout_height="55dp"
+                android:text="@string/TalksInBangalore"
+                android:background="@color/white"
+                android:textColor="@color/black"
+                tools:ignore="ButtonStyle" />
+        </LinearLayout>
+    </RelativeLayout>
+</ScrollView>

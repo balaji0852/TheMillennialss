@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "682858959281-rmu74v4ugc25ibe7c56egtkf8g3v05no.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.tmv01.themillennial",
+            "certificate_hash": "667f24bf0f3f83a5b9fbeb204075e921794f6a20"
+          }
+        },
+        {
           "client_id": "682858959281-4o5ss9odtiqpgb96ci0en0a83i81nbdj.apps.googleusercontent.com",
           "client_type": 3
         }

@@ -41,40 +41,41 @@ public class cyclebottom extends RecyclerView.Adapter<cyclebottom.MyViewHolder> 
 
     @Override
     public void onBindViewHolder(@NonNull final MyViewHolder myViewHolder, int i) {
-        final firstpagedata dataleft=firstpagebottomdata.get(i);
-        myViewHolder.text.setText(dataleft.getHeadline());
-        Picasso.get().load(dataleft.getImage()).placeholder(R.mipmap.ic_launcher).fit().centerCrop().into(myViewHolder.image);
+        final firstpagedata dataLeft=firstpagebottomdata.get(i);
+        myViewHolder.text.setText(dataLeft.getHeadline());
+        myViewHolder.viewCount.setText(dataLeft.getViews()+" views");
+//        Picasso.get().load(dataLeft.getImage()).placeholder(R.mipmap.ic_launcher).fit().centerCrop().into(myViewHolder.image);
 
-        myViewHolder.image.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v ) {
-                Intent data = new Intent(v.getContext(), news.class);
-                data.putExtra("date",dataleft.getDate());
-                data.putExtra("category",dataleft.getCategory());
-                data.putExtra("headline",dataleft.getHeadline());
-                data.putExtra("image",dataleft.getImage());
-                data.putExtra("textualdata",dataleft.getTextualdata());
-                data.putExtra("savednews","false");
-                data.putExtra("likes",dataleft.getLikes());
-                data.putExtra("title","The Millennial");
-                Integer views  = dataleft.getViews()+1;
-                data.putExtra("views", views);
-                v.getContext().startActivity(data);
-            }
-        });
+//        myViewHolder.image.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v ) {
+//                Intent data = new Intent(v.getContext(), news.class);
+//                data.putExtra("date",dataLeft.getDate());
+//                data.putExtra("category",dataLeft.getCategory());
+//                data.putExtra("headline",dataLeft.getHeadline());
+//                data.putExtra("image",dataLeft.getImage());
+//                data.putExtra("textualdata",dataLeft.getTextualdata());
+//                data.putExtra("savednews","false");
+//                data.putExtra("likes",dataLeft.getLikes());
+//                data.putExtra("title","The Millennial");
+//                Integer views  = dataLeft.getViews()+1;
+//                data.putExtra("views", views);
+//                v.getContext().startActivity(data);
+//            }
+//        });
         myViewHolder.text.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v ) {
                 Intent data = new Intent(v.getContext(), news.class);
-                data.putExtra("date",dataleft.getDate());
-                data.putExtra("category",dataleft.getCategory());
-                data.putExtra("headline",dataleft.getHeadline());
+                data.putExtra("date",dataLeft.getDate());
+                data.putExtra("category",dataLeft.getCategory());
+                data.putExtra("headline",dataLeft.getHeadline());
                 data.putExtra("savednews","false");
-                data.putExtra("image",dataleft.getImage());
-                data.putExtra("textualdata",dataleft.getTextualdata());
-                data.putExtra("likes",dataleft.getLikes());
+                data.putExtra("image",dataLeft.getImage());
+                data.putExtra("textualdata",dataLeft.getTextualdata());
+                data.putExtra("likes",dataLeft.getLikes());
                 data.putExtra("title","The Millennial");
-                Integer views  = dataleft.getViews()+1;
+                Integer views  = dataLeft.getViews()+1;
                 data.putExtra("views", views);
                 v.getContext().startActivity(data);
             }
@@ -91,15 +92,15 @@ public class cyclebottom extends RecyclerView.Adapter<cyclebottom.MyViewHolder> 
 
     public class MyViewHolder extends RecyclerView.ViewHolder
     {
-        TextView text;
-        ImageView image;
+        TextView text,viewCount;
 
         public MyViewHolder(@NonNull final View itemView)
         {
             super(itemView);
 
             text = itemView.findViewById(R.id.tbtext);
-            image= itemView.findViewById(R.id.timage);
+            viewCount = itemView.findViewById(R.id.viewcount);
+
 
 
 

@@ -79,7 +79,7 @@ public class firstpageadapter extends RecyclerView.Adapter<firstpageadapter.MyVi
 
             myViewHolder.text.setText(dataleft.getHeadline());
             myViewHolder.views.setText(dataleft.getViews()+" views");
-            myViewHolder.likes.setText(dataleft.getPlikes()+"% users liked");
+//            myViewHolder.likes.setText(dataleft.getPlikes()+"% users liked");
             Picasso.get().load(dataleft.getImage()).placeholder(R.mipmap.ic_launcher).fit().centerCrop().into(myViewHolder.image);
             final FirebaseFirestore db = FirebaseFirestore.getInstance();
 

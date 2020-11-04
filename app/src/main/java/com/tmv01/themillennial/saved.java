@@ -5,7 +5,10 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.ImageButton;
 
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.EventListener;
@@ -29,6 +32,19 @@ public class saved extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+
+        ImageButton Back = findViewById(R.id.backButton);
+
+        Back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent Back = new Intent(saved.this,setting.class);
+                Back.putExtra("date",getIntent().getStringExtra("date"));
+                finish();
+                startActivity(Back);
+            }
+        });
+
 
         db.collection("8151033423").document("saved")
                 .collection("news").whereEqualTo("saved",true)

@@ -2,4 +2,35 @@
     <string name="app_name">The Millennial</string>
     <string name="open">open</string>
     <string name="visible">visible</string>
+    <string name="next">Next</string>
+    <string name="tib">Talks in bangalore</string>
+    <string name="setting">Settings</string>
+    <string name="profile">Profile</string>
+    <string name="savednews">Saved news</string>
+    <string name="preference">News Preference</string>
+    <string name="Policy">Policy</string>
+    <string name="logout">logout</string>
+    <string name="sports">Sports</string>
+    <string name="autoNews">Auto News</string>
+    <string name="Technology">Technology</string>
+    <string name="Fashion">Fashion</string>
+    <string name="Entertainment">Entertainment</string>
+    <string name="Education">Education</string>
+    <string name="Politics">Politics</string>
+    <string name="TalksInBangalore">TIB</string>
+    <string name="done">Done</string>
+    <string name="selectDate">Newspapers date</string>
+    <string name="phonenumber">phone number</string>
+    <string name="sendotp">Send OTP</string>
+    <string name="enterPhoneNumber">Detective enter your phone Number</string>
+    <string name="enterpwd">your password</string>
+    <string name="login">login</string>
+    <string name="password">Password</string>
+    <string name="createAcc">Create account</string>
+    <string name="signUp">sign-up</string>
+    <string name="email">Email</string>
+    <string name="policies">I am all ready to read newspapers,YOO</string>
+
+
+
 </resources>

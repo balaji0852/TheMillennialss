@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CalendarView;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 public class Main2Activity extends AppCompatActivity {
@@ -19,6 +20,19 @@ public class Main2Activity extends AppCompatActivity {
         final CalendarView cal = findViewById(R.id.calendars);
         final Intent intent = new Intent(Main2Activity.this,firstpage.class);
         Button done=findViewById(R.id.done);
+
+        ImageButton Back = findViewById(R.id.backButton);
+
+        Back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent Back = new Intent(Main2Activity.this,firstpage.class);
+                Back.putExtra("date",getIntent().getStringExtra("date"));
+                finish();
+                startActivity(Back);
+            }
+        });
+
         cal.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
             public void onSelectedDayChange(@NonNull CalendarView calendarView, int i, int i1, int i2) {
@@ -57,6 +71,8 @@ public class Main2Activity extends AppCompatActivity {
                 finish();
             }
         });
+
+
 
     }
 }

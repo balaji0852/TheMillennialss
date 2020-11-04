@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,27 +7,224 @@
     android:screenOrientation="portrait"
     tools:context=".MainActivity">
 
-    <Button
-        android:id="@+id/newspaper"
-        android:layout_width="128dp"
-        android:layout_height="45dp"
-        android:text=" Newspaper"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.9" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
 
     <TextView
-        android:id="@+id/headline"
-        android:layout_width="336dp"
-        android:layout_height="124dp"
-        android:text="TextView"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.446"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/bangers"
+        android:text="@string/app_name"
+        android:textColor="@color/red"
+        android:textSize="45sp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="10dp"
+        tools:ignore="RtlSymmetry" />
+
+    <TextView
+        android:id="@+id/enter"
+        android:layout_width="wrap_content"
+        android:layout_below="@id/title"
+        android:layout_height="wrap_content"
+        android:text="@string/enterPhoneNumber"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="75dp"
+        android:fontFamily="@font/bangers"/>
+
+    <Button
+        android:id="@+id/newspaper"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/login"
+        android:layout_below="@id/password"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/news"
+        android:fontFamily="@font/bangers"
+        android:textSize="18sp"
+        android:layout_marginTop="30dp" />
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <EditText
+        android:id="@+id/phoneNumber"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/enter"
+        android:fontFamily="@font/bangers"
+        android:background="@drawable/news"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingTop="7dp"
+        android:paddingBottom="5dp"
+        android:ems="10"
+        android:maxLength="10"
+        android:inputType="phone"
+        android:hint="@string/phonenumber"/>
+
+    <TextView
+        android:id="@+id/pwd"
+        android:layout_width="wrap_content"
+        android:layout_below="@id/phoneNumber"
+        android:layout_height="wrap_content"
+        android:text="@string/enterpwd"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="75dp"
+        android:fontFamily="@font/bangers"/>
+
+    <EditText
+        android:id="@+id/password"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/pwd"
+        android:fontFamily="@font/bangers"
+        android:background="@drawable/news"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingTop="7dp"
+        android:paddingBottom="5dp"
+        android:layout_marginTop="5dp"
+        android:ems="10"
+        android:inputType="textPassword"
+        android:hint="@string/password"
+        tools:ignore="TextFields" />
+
+    <TextView
+        android:id="@+id/line"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@id/newspaper"
+        android:layout_marginTop="5dp"
+        android:background="@color/black"/>
+
+    <TextView
+        android:id="@+id/create"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="30dp"
+        android:layout_below="@id/line"
+        android:layout_marginTop="10dp"
+        android:text="@string/createAcc"
+        android:fontFamily="@font/bangers"
+        android:textSize="20sp"
+        android:textColor="@color/red" />
+
+        <EditText
+            android:id="@+id/userName"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@+id/create"
+            android:background="@drawable/news"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingTop="7dp"
+            android:paddingBottom="5dp"
+            android:ems="10"
+            android:layout_marginTop="10dp"
+            android:inputType="textPersonName"
+            android:hint="your name"/>
+
+        <EditText
+            android:id="@+id/phoneNumber1"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@+id/userName"
+            android:fontFamily="@font/bangers"
+            android:background="@drawable/news"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingTop="7dp"
+            android:paddingBottom="5dp"
+            android:ems="10"
+            android:maxLength="10"
+            android:layout_marginTop="10dp"
+            android:inputType="phone"
+            android:hint="@string/phonenumber"/>
+
+        <EditText
+            android:id="@+id/email"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@+id/phoneNumber1"
+            android:background="@drawable/news"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingTop="7dp"
+            android:paddingBottom="5dp"
+            android:ems="10"
+            android:layout_marginTop="10dp"
+            android:inputType="textEmailAddress"
+            android:hint="@string/email"
+            tools:ignore="TextFields" />
+
+        <EditText
+            android:id="@+id/password1"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@+id/email"
+            android:background="@drawable/news"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingTop="7dp"
+            android:paddingBottom="5dp"
+            android:ems="10"
+            android:layout_marginTop="10dp"
+            android:inputType="textPassword"
+            android:hint="@string/password"
+            tools:ignore="TextFields" />
+
+        <LinearLayout
+            android:id="@+id/policies"
+            android:layout_below="@id/password1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginStart="20dp"
+            android:layout_alignParentStart="true">
+
+            <RadioButton
+                android:id="@+id/accept"
+                android:layout_marginTop="7dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <TextView
+                android:id="@+id/policy"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="30dp"
+                android:layout_marginTop="10dp"
+                android:text="@string/policies"
+                android:fontFamily="@font/bangers"
+                android:textSize="15sp"
+                android:textColor="@color/red" />
+
+
+
+        </LinearLayout>
+
+
+
+        <Button
+            android:id="@+id/createAccount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/signUp"
+            android:layout_below="@id/policies"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/news"
+            android:fontFamily="@font/bangers"
+            android:textSize="18sp"
+            android:layout_marginTop="10dp" />
+    </RelativeLayout>
+
+</ScrollView>

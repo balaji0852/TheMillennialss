@@ -1,34 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Main2Activity">
 
-    <CalendarView
-        android:id="@+id/calendars"
-        android:layout_width="wrap_content"
+    <RelativeLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.492"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.335" />
+        android:layout_gravity="center_horizontal">
 
-    <Button
-        android:id="@+id/done"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="done"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/calendars"
-        app:layout_constraintVertical_bias="0.258"
-        android:background="@drawable/news"
-        android:fontFamily="@font/bangers"
-        android:textSize="25sp"/>
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <ImageButton
+            android:layout_marginTop="10dp"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="15dp"
+            android:layout_alignParentTop="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/backButton"
+            android:src="@drawable/ic_baseline_arrow_back_24"/>
+
+
+        <TextView
+            android:id="@+id/preference"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/bangers"
+            android:text="@string/selectDate"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:paddingRight="10dp"
+            android:paddingLeft="10dp"
+            android:textColor="@color/red"
+            android:layout_marginTop="10dp"
+            android:textSize="28sp"/>
+
+        <CalendarView
+            android:id="@+id/calendars"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="70dp"/>
+
+        <Button
+            android:layout_centerHorizontal="true"
+            android:id="@+id/done"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/done"
+            android:background="@drawable/news"
+            android:fontFamily="@font/bangers"
+            android:layout_marginTop="50dp"
+            android:layout_below="@id/calendars"
+            android:textSize="25sp"/>
+
+    </RelativeLayout>
+
+</ScrollView>

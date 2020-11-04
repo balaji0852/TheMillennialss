@@ -38,7 +38,7 @@ import javax.annotation.Nullable;
 
 import static java.lang.String.valueOf;
 
-public class tib<url> extends AppCompatActivity {
+public class tib extends AppCompatActivity {
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     ArrayList<firstpagedata> maindata= new ArrayList<>();
     public RecyclerView news;
@@ -106,10 +106,10 @@ public class tib<url> extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tib);
-        final Button nextpage = findViewById(R.id.nextcategory);
+        final Button nextpage = findViewById(R.id.nextCategory);
         final ImageButton setting = findViewById(R.id.settings);
         news =findViewById(R.id.tib);
-        final TextView title = findViewById(R.id.newstitle);
+        final TextView title = findViewById(R.id.headline);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(tib.this);
         ((LinearLayoutManager) layoutManager).setOrientation(RecyclerView.VERTICAL);
         news.setLayoutManager(layoutManager);
@@ -157,7 +157,10 @@ public class tib<url> extends AppCompatActivity {
         setting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(tib.this,setting.class));
+                Intent intent = new Intent(tib.this,setting.class);
+                intent.putExtra("date",getIntent().getStringExtra("date"));
+                finish();
+                startActivity(intent);
             }
         });
 
