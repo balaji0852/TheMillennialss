@@ -20,17 +20,21 @@
     <string name="TalksInBangalore">TIB</string>
     <string name="done">Done</string>
     <string name="selectDate">Newspapers date</string>
-    <string name="phonenumber">phone number</string>
+    <string name="phonenumber">phone no.</string>
     <string name="sendotp">Send OTP</string>
     <string name="enterPhoneNumber">Detective enter your phone Number</string>
     <string name="enterpwd">your password</string>
     <string name="login">login</string>
-    <string name="password">Password</string>
+    <string name="password">password  </string>
     <string name="createAcc">Create account</string>
     <string name="signUp">sign-up</string>
-    <string name="email">Email</string>
+    <string name="email">email Id</string>
+    <string name="name">name</string>
+    <string name="goBack">go back</string>
+    <string name="forgotPWD"><U>forgot password</U></string>
     <string name="policies">I am all ready to read newspapers,YOO</string>
-
+    <string name="emailP">email ID/phone no.</string>
+    <string name="pleaseOTP">Note:enter the 6-digit otp after signing up.</string>
 
 
 </resources>

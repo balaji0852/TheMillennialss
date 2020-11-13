@@ -27,14 +27,15 @@ public class saved extends AppCompatActivity {
     ArrayList<savedpagedata> saveddata= new ArrayList<>();
     public RecyclerView savedlist;
     savedadapter saves;
-
+    String uno;
 
     @Override
     protected void onStart() {
         super.onStart();
 
         ImageButton Back = findViewById(R.id.backButton);
-
+        FeedReaderDbHelper database = new FeedReaderDbHelper(this);
+        uno = database.getUser(this);
         Back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -46,7 +47,7 @@ public class saved extends AppCompatActivity {
         });
 
 
-        db.collection("8151033423").document("saved")
+        db.collection(uno).document("saved")
                 .collection("news").whereEqualTo("saved",true)
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override

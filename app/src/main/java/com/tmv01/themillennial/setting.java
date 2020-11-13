@@ -1,14 +1,21 @@
 package com.tmv01.themillennial;
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class setting extends AppCompatActivity {
 
-
+    public void logout(){
+        FeedReaderDbHelper database = new FeedReaderDbHelper(this);
+        database.logout(this);
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -17,6 +24,19 @@ public class setting extends AppCompatActivity {
         TextView saved = findViewById(R.id.saved);
 
         ImageButton Back = findViewById(R.id.backButton);
+        Button logout = findViewById(R.id.logout);
+
+        logout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                logout();
+                Toast.makeText(setting.this,"logging out",Toast.LENGTH_SHORT);
+                startActivity(new Intent(setting.this,MainActivity.class));
+                finish();
+            }
+        });
+
+
 
         Back.setOnClickListener(new View.OnClickListener() {
             @Override

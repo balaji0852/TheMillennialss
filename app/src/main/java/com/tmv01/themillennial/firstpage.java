@@ -37,11 +37,11 @@ public class firstpage extends AppCompatActivity {
     cyclebottom bottomadapter;
     public static final String DATE_FORMAT ="yyyy-MM-dd";
     String udate;
+    FeedReaderDbHelper database = new FeedReaderDbHelper(this);
 
     @Override
     public void onStart() {
         super.onStart();
-
         if (getIntent().getStringExtra("date") == null) {
             @SuppressLint("SimpleDateFormat") SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT);
             dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
@@ -177,12 +177,14 @@ public class firstpage extends AppCompatActivity {
         ((LinearLayoutManager) layoutManager1).setOrientation(RecyclerView.HORIZONTAL);
         firstleftdata.setLayoutManager(layoutManager);
         firstpagebottom.setLayoutManager(layoutManager1);
-        pageadapter  = new firstpageadapter(firstpage.this,leftdata);
+        pageadapter  = new firstpageadapter(firstpage.this,leftdata,database.getUser(this));
         firstleftdata.setAdapter(pageadapter);
         bottomadapter= new cyclebottom(firstpage.this,leftdata);
         firstpagebottom.setAdapter(bottomadapter);
         ImageButton date=findViewById(R.id.date);
         TextView views = findViewById(R.id.Headlinebackground);
+
+//        views.setText(String.valueOf());
 
 
         date.setOnClickListener(new View.OnClickListener() {

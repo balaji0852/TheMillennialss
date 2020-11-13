@@ -8,53 +8,78 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-
 import android.annotation.SuppressLint;
+import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.FileOutputStream;
+import java.net.Inet4Address;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 
 public class MainActivity extends AppCompatActivity {
     FirebaseFirestore db= FirebaseFirestore.getInstance();
     Boolean flag,flag1= false;
+    final FeedReaderDbHelper database = new FeedReaderDbHelper(this);
+    String data;
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        if(database.getUser(this)!="false"){
+            startActivity(new Intent(MainActivity.this,firstpage.class));
+            finish();
+        }
+    }
+
+
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        final Button gotoNewspaper = findViewById(R.id.newspaper);
-        final Button createAcc = findViewById(R.id.createAccount);
+        data = database.getUser(this);
+        TextView createAcc = findViewById(R.id.signUp);
         final EditText phoneNumber = findViewById(R.id.phoneNumber);
-        final EditText phoneNumber1 = findViewById(R.id.phoneNumber1);
-        final EditText email = findViewById(R.id.email);
         final EditText password = findViewById(R.id.password);
-        final EditText password1 = findViewById(R.id.password1);
-        final EditText userName = findViewById(R.id.userName);
+        TextView forgotPassword = findViewById(R.id.forgotPassword);
+        Button login = findViewById(R.id.loginBtn);
+        //Toast.makeText(MainActivity.this,String.valueOf(database.getAuth(this)), Toast.LENGTH_LONG).show();
 
 
 
 
 
 
-        gotoNewspaper.setOnClickListener(new View.OnClickListener() {
+
+                                         login.setOnClickListener(new View.OnClickListener() {
                                              @Override
                                              public void onClick(View view) {
-                                                 checkPresence(phoneNumber.getText().toString(),password.getText().toString());
+                                                 checkPresence(phoneNumber.getText().toString(),password.getText().toString(),database,MainActivity.this);
                                              }
                                          });
-
 
         createAcc.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                createAccount(phoneNumber1.getText().toString(),email.getText().toString(),password1.getText().toString(),userName.getText().toString());
+
+                startActivity(new Intent(MainActivity.this,SignUp.class));
             }
         });
 
@@ -62,34 +87,38 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
-    public void createAccount(String phoneNumber,String email,String password,String userName){
-        CollectionReference account = db.collection(phoneNumber);
-        Map<String,Object> preference = new HashMap<>();
-        Map<String,Object> Account = new HashMap<>();
-        preference.put("Autonews",false);
-        preference.put("Education",false);
-        preference.put("Entertainment",false);
-        preference.put("Fashion",false);
-        preference.put("Politics",false);
-        preference.put("Sports",false);
-        preference.put("Technology",false);
-        preference.put("Tib",false);
-        Account.put("emailId",email);
-        Account.put("password",password);
-        Account.put("phoneNumber",phoneNumber);
-        Account.put("UserName",userName);
-        account.document("preference").set(preference);
-        account.document("Account").set(Account);
-        startActivity(new Intent(MainActivity.this,firstpage.class));
 
-    }
+//    public void createAccount(String phoneNumber,String email,String password,String userName){
+//        CollectionReference account = db.collection(phoneNumber);
+//        Map<String,Object> preference = new HashMap<>();
+//        Map<String,Object> Account = new HashMap<>();
+//        preference.put("Autonews",false);
+//        preference.put("Education",false);
+//        preference.put("Entertainment",false);
+//        preference.put("Fashion",false);
+//        preference.put("Politics",false);
+//        preference.put("Sports",false);
+//        preference.put("Technology",false);
+//        preference.put("Tib",false);
+//        Account.put("emailId",email);
+//        Account.put("password",password);
+//        Account.put("phoneNumber",phoneNumber);
+//        Account.put("UserName",userName);
+//        account.document("preference").set(preference);
+//        account.document("Account").set(Account);
+//        startActivity(new Intent(MainActivity.this,firstpage.class));
+//
+//    }
 
-     public void checkPresence(final String phoneNumber,final String password) {
+     public void checkPresence(final String phoneNumber, final String password, final FeedReaderDbHelper database, final Context context) {
+
          db.collection(phoneNumber).document("Account").get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
              @Override
              public void onSuccess(DocumentSnapshot documentSnapshot) {
                  if(documentSnapshot.get("phoneNumber").equals(phoneNumber)){
-                     checkPassword(password,phoneNumber);
+
+                     checkPassword(password,phoneNumber,database,context);
+
                  }
                  else{
                      Toast.makeText(MainActivity.this,"Please try again later.", Toast.LENGTH_LONG).show();
@@ -103,14 +132,14 @@ public class MainActivity extends AppCompatActivity {
          });
      }
 
-    public void checkPassword(final String pwd, final String phoneNumber) {
+    public void checkPassword(final String pwd, final String phoneNumber, final FeedReaderDbHelper database, final Context context) {
         db.collection(phoneNumber).document("Account").get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
-                if(documentSnapshot.get("password").equals(pwd)){
-                    Toast.makeText(MainActivity.this,"Successfully logged in.", Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(MainActivity.this,firstpage.class);
-                    startActivity(intent);
+                if(Objects.equals(documentSnapshot.get("password"), pwd) &&  database.insertUSER(phoneNumber,context)){
+                    String number = String.valueOf(database.getUser(context));
+                    Toast.makeText(MainActivity.this,"Successfully logged in" , Toast.LENGTH_LONG).show();
+                    startActivity(new Intent(context,firstpage.class));
                     finish();
                 }
                 else{
@@ -134,4 +163,65 @@ public class MainActivity extends AppCompatActivity {
 //            }
 //        });
 
+
+
+
+
 }
+
+class FeedReaderDbHelper extends SQLiteOpenHelper {
+    // If you change the database schema, you must increment the database version.
+    public static final int DATABASE_VERSION = 1;
+    public static final String DATABASE_NAME = "AUTHENTICATION";
+
+    public FeedReaderDbHelper(Context context) {
+        super(context, DATABASE_NAME, null, DATABASE_VERSION);
+    }
+    public void onCreate(SQLiteDatabase db) {
+        db.execSQL("CREATE TABLE IF NOT EXISTS AUTHENTICATION(phoneNumber NUMBER PRIMARY KEY, user_in NUMBER)");
+        System.out.println("table created.");
+    }
+
+    @Override
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        db.execSQL("DROP TABLE IF EXISTS AUTHENTICATION");
+        System.out.println("New table was created ");
+        onCreate(db);
+    }
+
+    public boolean insertUSER(String phoneNumber,Context context) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("phoneNumber",phoneNumber);
+        contentValues.put("user_in",1);
+        db.insert("AUTHENTICATION", null, contentValues);
+        Toast.makeText(context,"Successfully logged in.", Toast.LENGTH_SHORT).show();
+        return true;
+    }
+
+    public String getUser(Context context) {
+            SQLiteDatabase db = this.getReadableDatabase();
+            ArrayList<String> array_list = new ArrayList<String>();
+            Cursor res = db.rawQuery("SELECT phoneNumber FROM AUTHENTICATION", null);
+            res.moveToFirst();
+            while (!res.isAfterLast()) {
+                array_list.add(res.getString(0));
+                res.moveToNext();
+            }
+            res.close();
+
+            return array_list.size()>=1?array_list.get(0):"false";
+    }
+
+
+
+    public void logout(Context context){
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL("DELETE FROM AUTHENTICATION" );
+        db.close();
+    }
+
+
+}
+
+

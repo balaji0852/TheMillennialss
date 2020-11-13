@@ -48,13 +48,14 @@ public class news extends AppCompatActivity {
     Bitmap bmp ;
     Context context;
     private Object Context;
-
+    String uno;
+    FeedReaderDbHelper database = new FeedReaderDbHelper(this);
 
     @Override
     protected void onStart() {
         super.onStart();
-
-        db.collection("8151033423").document("views").get().
+        uno = database.getUser(this);
+        db.collection(uno).document("views").get().
                 addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
@@ -62,13 +63,13 @@ public class news extends AppCompatActivity {
                         Number val = (Number) documentSnapshot.get(Category);
                         Map<String, Object> viewsdata = new HashMap<>();
                         viewsdata.put(Category, val.intValue()+1);
-                        db.collection("8151033423").document("views").set(viewsdata, SetOptions.merge());
+                        db.collection(uno).document("views").set(viewsdata, SetOptions.merge());
                     }});
 
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_news);
         TextView Headline    = findViewById(R.id.headline);
@@ -80,11 +81,11 @@ public class news extends AppCompatActivity {
         final ImageButton like = findViewById(R.id.like);
         ImageView Imagedata = findViewById(R.id.imagedata);
         ImageButton share = findViewById(R.id.share);
-
+        uno = database.getUser(this);
         Headline.setText(getIntent().getStringExtra("headline"));
         category.setText(getIntent().getStringExtra("title"));
         Picasso.get().load(getIntent().getStringExtra("image")).placeholder(R.mipmap.ic_launcher).fit().centerCrop().into(Imagedata);
-        db.collection("8151033423").document("saved").collection("news").
+        db.collection(uno).document("saved").collection("news").
                 whereEqualTo("headline",getIntent().getStringExtra("headline")).get().
                 addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -171,7 +172,7 @@ public class news extends AppCompatActivity {
             public void onClick(View view) {
                 final CollectionReference newsdata =  db.collection(getIntent().getStringExtra("date")).
                         document(getIntent().getStringExtra("category")).collection("news");
-                final CollectionReference database = db.collection("8151033423").
+                final CollectionReference database = db.collection(uno).
                         document("saved").collection("news");
                 db.collection("nusers").document("ucount").get().
                         addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
@@ -217,10 +218,10 @@ public class news extends AppCompatActivity {
                                                                                                     liked.put("plikes", Math.round(temp));
                                                                                                     newsdata.document(document.getId()).set(liked, SetOptions.merge());
                                                                                                 }}}});
-                                                                            FirebaseFirestore.getInstance().collection("8151033423").document("saved")
+                                                                            FirebaseFirestore.getInstance().collection(uno).document("saved")
                                                                                     .collection("news").document().set(liked);
                                                                             Toast.makeText(news.this, "liked", Toast.LENGTH_SHORT).show();
-                                                                            db.collection("8151033423").document("views").get().
+                                                                            db.collection(uno).document("views").get().
                                                                                     addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                                                                                         @Override
                                                                                         public void onSuccess(DocumentSnapshot documentSnapshot) {
@@ -252,11 +253,11 @@ public class news extends AppCompatActivity {
 
                                                                                     if ((Boolean)docs.get("saved")) {
                                                                                         liked.put("liked", false);
-                                                                                        db.collection("8151033423").document("saved")
+                                                                                        db.collection(uno).document("saved")
                                                                                                 .collection("news").document(docs.getId()).update(liked);
                                                                                         Toast.makeText(news.this, "disliked.", Toast.LENGTH_SHORT).show();
                                                                                     } else {
-                                                                                        db.collection("8151033423").document("saved")
+                                                                                        db.collection(uno).document("saved")
                                                                                                 .collection("news").document(docs.getId()).delete();
                                                                                         Toast.makeText(news.this, "disliked.", Toast.LENGTH_SHORT).show();
                                                                                     }
@@ -280,16 +281,16 @@ public class news extends AppCompatActivity {
                                                                                                         }}}});
                                                                                     if ((Boolean)docs.get("saved")) {
                                                                                         liked.put("liked", true);
-                                                                                        FirebaseFirestore.getInstance().collection("8151033423").document("saved")
+                                                                                        FirebaseFirestore.getInstance().collection(uno).document("saved")
                                                                                                 .collection("news").document(docs.getId()).update(liked);
                                                                                         Toast.makeText(news.this, "liked", Toast.LENGTH_SHORT).show();
                                                                                     } else {
                                                                                         liked.put("liked", true);
-                                                                                        FirebaseFirestore.getInstance().collection("8151033423").document("saved")
+                                                                                        FirebaseFirestore.getInstance().collection(uno).document("saved")
                                                                                                 .collection("news").document(docs.getId()).update(liked);
                                                                                         Toast.makeText(news.this, "liked.", Toast.LENGTH_SHORT).show();
                                                                                     }
-                                                                                    db.collection("8151033423").document("views").get().
+                                                                                    db.collection(uno).document("views").get().
                                                                                             addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                                                                                                 @Override
                                                                                                 public void onSuccess(DocumentSnapshot documentSnapshot) {
@@ -297,7 +298,7 @@ public class news extends AppCompatActivity {
                                                                                                     Number value = (Number) documentSnapshot.get(Category);
                                                                                                     Map<String, Object> viewsdata = new HashMap<>();
                                                                                                     viewsdata.put(Category, value.intValue()+1);
-                                                                                                    db.collection("8151033423").document("views").set(viewsdata, SetOptions.merge());
+                                                                                                    db.collection(uno).document("views").set(viewsdata, SetOptions.merge());
                                                                                                 }});
 
                                                                                 }
@@ -316,7 +317,7 @@ public class news extends AppCompatActivity {
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                db.collection("8151033423").
+                db.collection(uno).
                         document("saved").collection("news")
                         .whereEqualTo("headline", getIntent().getStringExtra("headline")).get().
                         addOnCompleteListener(new OnCompleteListener<QuerySnapshot>()
@@ -334,10 +335,10 @@ public class news extends AppCompatActivity {
                                     saved.put("date",getIntent().getStringExtra("date"));
                                     saved.put("saved",true);
                                     saved.put("liked",false);
-                                    db.collection("8151033423").
+                                    db.collection(uno).
                                             document("saved").collection("news").document().set(saved);
                                     Toast.makeText(news.this, "News saved successfully.", Toast.LENGTH_SHORT).show();
-                                    db.collection("8151033423").document("views").get().
+                                    db.collection(uno).document("views").get().
                                             addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                                                 @Override
                                                 public void onSuccess(DocumentSnapshot documentSnapshot) {
@@ -345,7 +346,7 @@ public class news extends AppCompatActivity {
                                                     Number value = (Number) documentSnapshot.get(Category);
                                                     Map<String, Object> viewsdata = new HashMap<>();
                                                     viewsdata.put(Category, value.intValue()+1);
-                                                    db.collection("8151033423").document("views").set(viewsdata, SetOptions.merge());
+                                                    db.collection(uno).document("views").set(viewsdata, SetOptions.merge());
                                                 }});
                                 }
                                 else {
@@ -355,18 +356,18 @@ public class news extends AppCompatActivity {
                                             if ((Boolean)docs.get("liked")) {
                                                 saved.put("image","no image");
                                                 saved.put("saved", false);
-                                                FirebaseFirestore.getInstance().collection("8151033423").document("saved")
+                                                FirebaseFirestore.getInstance().collection(uno).document("saved")
                                                         .collection("news").document(docs.getId()).update(saved);
                                                 Toast.makeText(news.this, "News was removed from saved successfully.", Toast.LENGTH_SHORT).show();
                                             } else {
-                                                FirebaseFirestore.getInstance().collection("8151033423").document("saved")
+                                                FirebaseFirestore.getInstance().collection(uno).document("saved")
                                                         .collection("news").document(docs.getId()).delete();
                                                 Toast.makeText(news.this, "News was removed from saved successfully.", Toast.LENGTH_SHORT).show();
                                             }
 
                                         } else {
                                             save.setImageDrawable(getDrawable(R.drawable.black_star));
-                                            db.collection("8151033423").document("views").get().
+                                            db.collection(uno).document("views").get().
                                                     addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                                                         @Override
                                                         public void onSuccess(DocumentSnapshot documentSnapshot) {
@@ -374,18 +375,18 @@ public class news extends AppCompatActivity {
                                                             Number value = (Number) documentSnapshot.get(Category);
                                                             Map<String, Object> viewsdata = new HashMap<>();
                                                             viewsdata.put(Category, value.intValue()+1);
-                                                            db.collection("8151033423").document("views").set(viewsdata, SetOptions.merge());
+                                                            db.collection(uno).document("views").set(viewsdata, SetOptions.merge());
                                                         }});
                                             if ((Boolean)docs.get("liked")) {
                                                 saved.put("image",getIntent().getStringExtra("image"));
                                                 saved.put("saved", true);
-                                                FirebaseFirestore.getInstance().collection("8151033423").document("saved")
+                                                FirebaseFirestore.getInstance().collection(uno).document("saved")
                                                         .collection("news").document(docs.getId()).update(saved);
                                                 Toast.makeText(news.this, "News saved successfully.", Toast.LENGTH_SHORT).show();
                                             } else {
                                                 saved.put("image",getIntent().getStringExtra("image"));
                                                 saved.put("saved", true);
-                                                FirebaseFirestore.getInstance().collection("8151033423").document("saved")
+                                                FirebaseFirestore.getInstance().collection(uno).document("saved")
                                                         .collection("news").document(docs.getId()).update(saved);
                                                 Toast.makeText(news.this, "News saved successfully.", Toast.LENGTH_SHORT).show();
                                             }

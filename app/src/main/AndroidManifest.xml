@@ -11,7 +11,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="LockedOrientationActivity">
-        <activity android:name=".saved"></activity>
+        <activity android:name=".SignUp"></activity>
+        <activity android:name=".saved" />
         <activity android:name=".setting" />
         <activity android:name=".Main2Activity" />
         <activity android:name=".news" />

@@ -46,16 +46,16 @@ public class tib extends AppCompatActivity {
     newsadapter newspage;
     String category="Talks in Bangalore";
     private String Sports,Politics,Technology,Autonews,Tib,Entertainment,Fashion,Education;
-    String uno = "8151033423";
+    String uno;
     ArrayList<String> data = new ArrayList<>();
     public  String url;
     Integer like;
-
+    FeedReaderDbHelper database = new FeedReaderDbHelper(this);
 
     @Override
     protected void onStart() {
         super.onStart();
-
+        uno = database.getUser(this);
         db.collection(getIntent().getStringExtra("date")).document(category).collection("news").whereEqualTo("category",category)
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
@@ -65,7 +65,7 @@ public class tib extends AppCompatActivity {
                         for (QueryDocumentSnapshot retrievedDocSnap : queryDocumentSnapshots) {
 
                             final firstpagedata main= retrievedDocSnap.toObject(firstpagedata.class);
-                            db.collection("8151033423").document("saved").collection("news").
+                            db.collection(uno).document("saved").collection("news").
                                     whereEqualTo("headline",main.getHeadline()).get().
                                     addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                                         @Override
@@ -113,13 +113,14 @@ public class tib extends AppCompatActivity {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(tib.this);
         ((LinearLayoutManager) layoutManager).setOrientation(RecyclerView.VERTICAL);
         news.setLayoutManager(layoutManager);
-        newspage = new newsadapter(tib.this, maindata);
+        newspage = new newsadapter(tib.this, maindata,uno);
         news.setAdapter(newspage);
-
+        uno = database.getUser(this);
         db.collection(uno).document("preference").get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 preferencedata prefered = documentSnapshot.toObject(preferencedata.class);
+                assert prefered != null;
                 Sports = String.valueOf(prefered.getSports());
                 Politics = String.valueOf(prefered.getPolitics());
                 Technology = String.valueOf(prefered.getTechnology());

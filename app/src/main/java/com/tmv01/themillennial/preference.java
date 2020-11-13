@@ -19,13 +19,13 @@ import java.util.Map;
 public class preference extends AppCompatActivity  {
     FirebaseFirestore db= FirebaseFirestore.getInstance();
     private String Sports,Politics,Technology,Autonews,Tib,Entertainment,Fashion,Education;
-    String uno = "9538562603";
+    String uno;
 
     @Override
     protected void onStart() {
         super.onStart();
 
-            }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +40,8 @@ public class preference extends AppCompatActivity  {
                     final Button fashion = findViewById(R.id.Fashion);
                     final Button autonews = findViewById(R.id.AutoNews);
                     ImageButton Back = findViewById(R.id.backButton);
+                    FeedReaderDbHelper database = new FeedReaderDbHelper(this);
+                    uno = database.getUser(this);
 
                     Back.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -324,9 +326,4 @@ public class preference extends AppCompatActivity  {
 
 
     }
-
-
-
-
-
 }
