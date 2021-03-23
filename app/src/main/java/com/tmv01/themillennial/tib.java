@@ -113,7 +113,7 @@ public class tib extends AppCompatActivity {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(tib.this);
         ((LinearLayoutManager) layoutManager).setOrientation(RecyclerView.VERTICAL);
         news.setLayoutManager(layoutManager);
-        newspage = new newsadapter(tib.this, maindata,uno);
+        newspage = new newsadapter(tib.this, maindata,database.getUser(this));
         news.setAdapter(newspage);
         uno = database.getUser(this);
         db.collection(uno).document("preference").get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
